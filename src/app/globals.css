@@ -1,8 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  --background: #eef3f8;
-  --foreground: #10243d;
+  --background: #f4f7fb;
+  --foreground: #173c68;
+  --muted: #627489;
+  --line: rgba(23, 60, 104, 0.14);
+  --blue: #1f5ea8;
+  --blue-deep: #12375f;
+  --orange: #ff8a2a;
+  --coral: #f25b32;
+  --gold: #ffc35c;
+  --green: #16a36a;
+  --font-body: "Aptos", "Segoe UI", Arial, sans-serif;
+  --font-heading: "Segoe UI Variable Display", "Aptos Display", "Segoe UI", Arial, sans-serif;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-body);
 }
 
 * {
@@ -15,37 +31,114 @@ html {
 
 body {
   margin: 0;
-  background: var(--background);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(244, 247, 251, 0.95)),
+    radial-gradient(circle at 12% 0%, rgba(255, 195, 92, 0.38), transparent 34%),
+    radial-gradient(circle at 92% 4%, rgba(31, 94, 168, 0.18), transparent 28%),
+    var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), sans-serif;
 }
 
+a,
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
 }
 
-input[type="range"] {
-  accent-color: #f97316;
+a,
+button {
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    opacity 180ms ease;
 }
 
-.card {
-  border: 1px solid #d9e1ec;
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+button {
+  cursor: pointer;
 }
 
-.panel-title {
-  display: flex;
+::selection {
+  background: rgba(255, 138, 42, 0.2);
+  color: var(--blue-deep);
+}
+
+.font-heading {
+  font-family: var(--font-heading), sans-serif;
+}
+
+.shell {
+  position: relative;
+  overflow: hidden;
+}
+
+.shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(18, 55, 95, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(18, 55, 95, 0.045) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.42), transparent 80%);
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 70px rgba(18, 55, 95, 0.12);
+  backdrop-filter: blur(18px);
+}
+
+.title {
+  font-family: var(--font-heading), sans-serif;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.gradient-text {
+  background: linear-gradient(115deg, var(--orange), var(--coral) 50%, var(--blue));
+  background-clip: text;
+  color: transparent;
+}
+
+.button-primary {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  border-bottom: 1px solid #d9e1ec;
-  background: #061d36;
-  color: #ffffff;
-  padding: 12px 16px;
-  font-size: 13px;
-  font-weight: 900;
-  text-transform: uppercase;
+  justify-content: center;
+  gap: 0.55rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--orange), var(--coral));
+  color: white;
+  font-weight: 800;
+  box-shadow: 0 18px 34px rgba(242, 91, 50, 0.28);
+}
+
+.button-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--blue-deep);
+  font-weight: 800;
+}
+
+.button-primary:hover,
+.button-secondary:hover {
+  transform: translateY(-2px);
+}
+
+.data-card {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 18px 45px rgba(18, 55, 95, 0.08);
 }

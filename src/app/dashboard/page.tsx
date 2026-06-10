@@ -1,1 +1,5 @@
-export { default } from "../page";
+import DashboardClient from "./DashboardClient";
+
+export default function Dashboard() {
+  return <DashboardClient />;
+}
