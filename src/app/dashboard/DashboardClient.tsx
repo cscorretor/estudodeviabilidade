@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import carlitoLogo from "../../../public/carlito-logo-investidor.png";
 import rotulaMap from "../../../public/rotula-guilherme-scharf.jpeg";
 import {
   ArrowUpRight,
@@ -155,6 +154,8 @@ const SCENARIOS: Scenario[] = [
     note: "Fluxo triplicado melhora visibilidade, acesso e liquidez.",
   },
 ];
+
+const logoSrc = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/carlito-logo-investidor.png`;
 
 const formatCurrency = (value: number, digits = 0) =>
   value.toLocaleString("pt-BR", {
@@ -394,12 +395,11 @@ function Header() {
           </div>
         </div>
         <div className="rounded-lg bg-white px-3 py-1 shadow-sm ring-1 ring-[#d9e1ec]">
-          <Image
-            src={carlitoLogo}
+          <img
+            src={logoSrc}
             alt="Carlito de Souza Corretor de Imóveis"
             width={210}
             height={72}
-            priority
             className="h-auto w-[118px] sm:w-[158px]"
           />
         </div>
@@ -769,8 +769,8 @@ function PanelHeader({ icon: Icon, title }: { icon: typeof MapPinned; title: str
         <Icon size={18} className="text-[#ffb15f]" />
         <h2 className="text-sm font-black uppercase">{title}</h2>
       </div>
-      <Image
-        src={carlitoLogo}
+      <img
+        src={logoSrc}
         alt="Carlito de Souza"
         width={120}
         height={42}

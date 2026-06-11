@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   basePath: isGithubPages ? "/estudodeviabilidade" : "",
   assetPrefix: isGithubPages ? "/estudodeviabilidade/" : "",
+  env: {
+    NEXT_PUBLIC_BASE_PATH: isGithubPages ? "/estudodeviabilidade" : "",
+  },
   images: {
     unoptimized: true,
   },
