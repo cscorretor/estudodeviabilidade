@@ -260,13 +260,19 @@ export default function DashboardClient() {
   });
 
   const nav = [
-    { label: "Visão geral", icon: BarChart3 },
-    { label: "Localização", icon: MapPinned },
-    { label: "Mercado", icon: Truck },
-    { label: "Simulador", icon: Calculator },
-    { label: "Custos", icon: Landmark },
-    { label: "Investidor", icon: ShieldCheck },
+    { label: "Visão geral", icon: BarChart3, id: "visao-geral" },
+    { label: "Localização", icon: MapPinned, id: "localizacao" },
+    { label: "Mercado", icon: Truck, id: "mercado" },
+    { label: "Simulador", icon: Calculator, id: "simulador" },
+    { label: "Custos", icon: Landmark, id: "custos" },
+    { label: "Investidor", icon: ShieldCheck, id: "investidor" },
   ];
+
+  const handleNavClick = (label: string, id: string) => {
+    setActiveSection(label);
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.history.replaceState(null, "", `#${id}`);
+  };
 
   return (
     <main className="min-h-screen bg-[#eef3f8] text-[#10243d]">
@@ -283,8 +289,9 @@ export default function DashboardClient() {
                 const isActive = activeSection === item.label;
                 return (
                   <button
+                    type="button"
                     key={item.label}
-                    onClick={() => setActiveSection(item.label)}
+                    onClick={() => handleNavClick(item.label, item.id)}
                     className={`flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm font-bold ${
                       isActive ? "bg-[#f97316] text-white" : "text-white/78 hover:bg-white/8"
                     }`}
@@ -307,7 +314,7 @@ export default function DashboardClient() {
           <Header />
 
           <div className="mx-auto max-w-[1480px] px-4 py-5 sm:px-6 lg:px-7">
-            <section className="grid gap-4 xl:grid-cols-[1fr_440px]">
+            <section id="visao-geral" className="grid scroll-mt-20 gap-4 xl:grid-cols-[1fr_440px]">
               <div className="rounded-lg border border-[#d9e1ec] bg-white p-5 shadow-sm">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div>
@@ -410,7 +417,7 @@ function Header() {
 
 function MapPanel() {
   return (
-    <section className="overflow-hidden rounded-lg border border-[#d9e1ec] bg-white shadow-sm">
+    <section id="localizacao" className="scroll-mt-20 overflow-hidden rounded-lg border border-[#d9e1ec] bg-white shadow-sm">
       <PanelHeader icon={MapPinned} title="Localização principal: área da rótula" />
       <div className="grid gap-0 lg:grid-cols-[1fr_230px]">
         <div className="relative min-h-[360px] overflow-hidden bg-[#dde8f2]">
@@ -469,7 +476,7 @@ function SimulatorPanel({
   results: SimulationResult;
 }) {
   return (
-    <section className="rounded-lg border border-[#d9e1ec] bg-white shadow-sm">
+    <section id="simulador" className="scroll-mt-20 rounded-lg border border-[#d9e1ec] bg-white shadow-sm">
       <PanelHeader icon={SlidersHorizontal} title="Simulador de viabilidade por fração" />
       <div className="grid gap-4 p-4 lg:grid-cols-[1fr_0.95fr]">
         <div className="space-y-3">
@@ -543,7 +550,7 @@ function SimulatorPanel({
 
 function MarketPanel() {
   return (
-    <section className="rounded-lg border border-[#d9e1ec] bg-white shadow-sm">
+    <section id="mercado" className="scroll-mt-20 rounded-lg border border-[#d9e1ec] bg-white shadow-sm">
       <PanelHeader icon={Truck} title="Vocação comercial e mercado de aluguel" />
       <div className="p-4">
         <div className="mb-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
@@ -647,7 +654,7 @@ function CostsPanel({ results }: { results: SimulationResult }) {
   ];
 
   return (
-    <section className="rounded-lg border border-[#d9e1ec] bg-white shadow-sm">
+    <section id="custos" className="scroll-mt-20 rounded-lg border border-[#d9e1ec] bg-white shadow-sm">
       <PanelHeader icon={Landmark} title="Estrutura de custos do simulador" />
       <div className="grid gap-4 p-4 lg:grid-cols-[0.82fr_1.18fr]">
         <div className="rounded-lg bg-[#061d36] p-4 text-white">
@@ -705,7 +712,7 @@ function CostsPanel({ results }: { results: SimulationResult }) {
 
 function InvestorPanel({ results }: { results: SimulationResult }) {
   return (
-    <section className="rounded-lg border border-[#d9e1ec] bg-white shadow-sm">
+    <section id="investidor" className="scroll-mt-20 rounded-lg border border-[#d9e1ec] bg-white shadow-sm">
       <PanelHeader icon={ShieldCheck} title="Resumo comercial para investidores" />
       <div className="grid gap-4 p-4">
         <div className="grid gap-3 sm:grid-cols-2">
