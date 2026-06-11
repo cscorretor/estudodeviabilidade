@@ -18,6 +18,7 @@ import {
   MapPinned,
   MessageCircle,
   PackageCheck,
+  Presentation,
   Route,
   ShieldCheck,
   ShoppingCart,
@@ -358,6 +359,15 @@ export default function DashboardClient() {
               <p className="text-xs font-bold uppercase text-white/55">Contato</p>
               <p className="mt-2 text-xl font-black">47 99192-6000</p>
               <p className="mt-1 text-xs text-white/65">Carlito de Souza | CRECI 6894F</p>
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#f97316] px-3 py-2 text-xs font-black text-white hover:bg-[#ea580c]"
+              >
+                <MessageCircle size={16} />
+                Chamar no WhatsApp
+              </a>
             </div>
           </div>
         </aside>
@@ -371,12 +381,18 @@ export default function DashboardClient() {
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div>
                     <h1 className="text-3xl font-black tracking-tight text-[#061d36] sm:text-5xl">
-                      Área estratégica na rótula da Guilherme Scharf
+                      Janela de entrada antes do novo eixo da Via-Expressa
                     </h1>
                     <p className="mt-3 max-w-4xl text-base leading-7 text-[#5c6b7d]">
-                      São 128.000 m² de terreno, 68.000 m² úteis e 1.400 m de frente para a Rua Guilherme Scharf.
-                      A venda pode acontecer em frações, com vocação para supermercado, posto, varejo e logística.
+                      A área na rótula da Rua Guilherme Scharf combina preço de entrada, frente comercial e evento
+                      urbano relevante. A tese é simples: comprar frações antes da infraestrutura estar plenamente
+                      precificada e estruturar renda com vocação para varejo, serviços e logística.
                     </p>
+                    <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                      <HeroProof label="Entrada" value="R$ 600/m²" copy="Cota atual da fração" />
+                      <HeroProof label="Tese patrimonial" value="R$ 1.800/m²" copy="Cenário-alvo pós-2027" />
+                      <HeroProof label="Frente estratégica" value="1.400 m" copy="Exposição para a via" />
+                    </div>
                     <div className="mt-5 flex flex-wrap gap-3">
                       <a
                         href={WHATSAPP_URL}
@@ -400,8 +416,8 @@ export default function DashboardClient() {
                   <div className="grid gap-2 text-sm font-bold text-[#173c68] sm:grid-cols-2 lg:w-[340px]">
                     <MiniProof icon={ShieldCheck} text="Terreno já terraplanado na cota 15" />
                     <MiniProof icon={FileText} text="Licenciado para uso logístico e comercial" />
-                    <MiniProof icon={Route} text="Rótula e Via-Expressa como gatilho de fluxo" />
-                    <MiniProof icon={PackageCheck} text="Supermercado, posto, varejo e galpões" />
+                    <MiniProof icon={Route} text="Rótula + Via-Expressa como gatilho de fluxo" />
+                    <MiniProof icon={PackageCheck} text="Varejo, posto, serviços e galpões modulares" />
                   </div>
                 </div>
 
@@ -413,12 +429,24 @@ export default function DashboardClient() {
                 </div>
               </div>
 
-              <div className="rounded-lg border border-[#d9e1ec] bg-[#061d36] p-5 text-white shadow-sm">
-                <p className="text-sm font-black uppercase text-[#ffb15f]">A conta que o investidor entende</p>
+              <div className="rounded-lg border border-[#14385f] bg-[#061d36] p-5 text-white shadow-sm">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#f97316]">
+                    <Presentation size={20} />
+                  </div>
+                  <div>
+                    <p className="text-sm font-black uppercase text-[#ffb15f]">Tese em 30 segundos</p>
+                    <p className="text-lg font-black">Renda mensal + valorização patrimonial</p>
+                  </div>
+                </div>
                 <div className="mt-4 grid gap-3">
-                  <ValueStep number="1" title="Escolha uma fração" copy="A área total dá escala, mas o investidor pode comprar partes menores." />
-                  <ValueStep number="2" title="Defina a vocação" copy="Supermercado, posto, varejo e logística têm leituras diferentes de retorno." />
-                  <ValueStep number="3" title="Compare renda e valorização" copy="O ROI vem da locação, venda futura e alta patrimonial pós-viaduto." />
+                  <ValueStep number="1" title="Comprar antes do evento" copy="A entrada acontece antes da conclusão prevista do viaduto, quando a tese ainda não foi totalmente absorvida pelo preço." />
+                  <ValueStep number="2" title="Transformar frente em renda" copy="A frente de 1.400 m permite modular vocações: supermercado, posto, serviços, varejo e logística urbana." />
+                  <ValueStep number="3" title="Ter duas saídas" copy="O investidor pode buscar aluguel recorrente ou venda futura com VGV maior quando o corredor estiver mais maduro." />
+                </div>
+                <div className="mt-4 rounded-lg bg-white/8 p-3 text-xs font-semibold leading-5 text-white/70">
+                  Premissa, não promessa: os cenários dependem de custo executivo, ocupação, prazo da infraestrutura e
+                  mercado de locação no momento da implantação.
                 </div>
               </div>
             </section>
@@ -431,6 +459,8 @@ export default function DashboardClient() {
                 handleNavClick("Simulador", "simulador");
               }}
             />
+
+            <InvestmentThesisPanel />
 
             <section className="mt-4 grid gap-4 xl:grid-cols-[1.08fr_0.92fr]">
               <MapPanel />
@@ -559,6 +589,55 @@ function InvestmentOptionsPanel({
             </article>
           );
         })}
+      </div>
+    </section>
+  );
+}
+
+function InvestmentThesisPanel() {
+  const thesis = [
+    {
+      title: "Localização",
+      value: "Rótula Guilherme Scharf",
+      copy: "Ponto de leitura fácil para varejo e serviços, com frente longa e acesso em transformação.",
+    },
+    {
+      title: "Catalisador",
+      value: "Viaduto em 2027",
+      copy: "A conexão com a Via-Expressa pode reposicionar a rua de via local para corredor de exposição.",
+    },
+    {
+      title: "Preço",
+      value: "Assimetria de entrada",
+      copy: "Compra na cota atual de R$ 600/m² contra cenário-alvo patrimonial superior pós-infraestrutura.",
+    },
+    {
+      title: "Liquidez",
+      value: "Venda em frações",
+      copy: "A área total cria escala, mas o investidor decide por lotes menores, mais fáceis de analisar e negociar.",
+    },
+  ];
+
+  return (
+    <section className="mt-4 overflow-hidden rounded-lg border border-[#14385f] bg-[#061d36] shadow-sm">
+      <div className="grid gap-4 border-b border-white/10 p-4 text-white lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+        <div>
+          <p className="text-sm font-black uppercase text-[#ffb15f]">Narrativa de investimento</p>
+          <h2 className="mt-2 text-2xl font-black sm:text-3xl">O que precisa ficar na cabeça do investidor</h2>
+        </div>
+        <p className="text-sm leading-6 text-white/72">
+          A página agora conduz a leitura como um deck: primeiro a tese, depois a fração, em seguida os números,
+          os riscos e o próximo passo. Menos promessa, mais estrutura de decisão.
+        </p>
+      </div>
+      <div className="grid gap-px bg-white/10 md:grid-cols-2 xl:grid-cols-4">
+        {thesis.map((item) => (
+          <article key={item.title} className="bg-[#061d36] p-4 text-white">
+            <p className="text-xs font-black uppercase text-[#ffb15f]">{item.title}</p>
+            <p className="mt-2 text-xl font-black">{item.value}</p>
+            <p className="mt-2 text-sm leading-6 text-white/68">{item.copy}</p>
+          </article>
+        ))}
       </div>
     </section>
   );
@@ -996,6 +1075,16 @@ function Kpi({
       <p className="mt-1 text-3xl font-black text-[#061d36]">{value}</p>
       <p className="mt-1 text-sm text-[#6d7a89]">{help}</p>
     </article>
+  );
+}
+
+function HeroProof({ label, value, copy }: { label: string; value: string; copy: string }) {
+  return (
+    <div className="rounded-lg border border-[#d9e1ec] bg-[#f8fafc] p-3">
+      <p className="text-xs font-black uppercase text-[#6d7a89]">{label}</p>
+      <p className="mt-1 text-2xl font-black text-[#061d36]">{value}</p>
+      <p className="mt-1 text-xs font-semibold leading-5 text-[#6d7a89]">{copy}</p>
+    </div>
   );
 }
 
