@@ -1,18 +1,22 @@
 "use client";
+/* eslint-disable @next/next/no-img-element -- Logo uses a fixed public path to stay reliable on GitHub Pages. */
 
 import Image from "next/image";
 import rotulaMap from "../../../public/rotula-guilherme-scharf.jpeg";
 import {
+  AlertTriangle,
   ArrowUpRight,
   BadgeDollarSign,
   BarChart3,
   Calculator,
   CheckCircle2,
+  Clock3,
   FileText,
   Fuel,
   Gauge,
   Landmark,
   MapPinned,
+  MessageCircle,
   PackageCheck,
   Route,
   ShieldCheck,
@@ -34,6 +38,7 @@ type Scenario = {
 };
 
 type SimulationResult = {
+  builtArea: number;
   landCost: number;
   futureLandValue: number;
   directConstruction: number;
@@ -45,6 +50,7 @@ type SimulationResult = {
   indirectCosts: number;
   totalInvestment: number;
   monthlyRevenue: number;
+  annualGrossRevenue: number;
   annualNoi: number;
   capRate: number;
   vgv: number;
@@ -53,6 +59,10 @@ type SimulationResult = {
   margin: number;
   monthlyRevenue2027: number;
   safetySpread: number;
+  costPerBuiltM2: number;
+  paybackYears: number;
+  roiOnSale: number;
+  equityMultiple: number;
 };
 
 const ASSET = {
@@ -93,6 +103,8 @@ const MODULES = [
 ];
 
 const LOT_PRESETS = [2500, 3000, 5000];
+const WHATSAPP_URL =
+  "https://wa.me/5547991926000?text=Ol%C3%A1%2C%20quero%20analisar%20uma%20fra%C3%A7%C3%A3o%20da%20%C3%A1rea%20Guilherme%20Scharf.";
 
 const VOCATIONS = [
   {
@@ -157,6 +169,75 @@ const SCENARIOS: Scenario[] = [
 
 const logoSrc = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/carlito-logo-investidor.png`;
 
+function calculateFinancials({
+  lotArea,
+  coverage,
+  cubM2,
+  rentM2,
+  occupancy,
+  saleM2,
+}: {
+  lotArea: number;
+  coverage: number;
+  cubM2: number;
+  rentM2: number;
+  occupancy: number;
+  saleM2: number;
+}): SimulationResult {
+  const builtArea = Math.round(lotArea * (coverage / 100));
+  const landCost = lotArea * ASSET.landCostM2;
+  const futureLandValue = lotArea * ASSET.landTargetM2;
+  const directConstruction = builtArea * cubM2;
+  const itbi = landCost * COST_RATES.itbi;
+  const centralAdmin = directConstruction * COST_RATES.centralAdmin;
+  const localAdmin = directConstruction * COST_RATES.localAdmin;
+  const postSaleRisk = directConstruction * COST_RATES.postSaleRisk;
+  const projectsAndFees = directConstruction * COST_RATES.projectsAndFees;
+  const indirectCosts = itbi + centralAdmin + localAdmin + postSaleRisk + projectsAndFees;
+  const totalInvestment = landCost + directConstruction + indirectCosts;
+  const monthlyRevenue = builtArea * rentM2 * (occupancy / 100);
+  const annualGrossRevenue = monthlyRevenue * 12;
+  const annualNoi = annualGrossRevenue * 0.9;
+  const capRate = totalInvestment > 0 ? (annualNoi / totalInvestment) * 100 : 0;
+  const vgv = builtArea * saleM2;
+  const saleExpenses = vgv * (COST_RATES.publicity + COST_RATES.saleTaxes + COST_RATES.brokerage);
+  const profit = vgv - totalInvestment - saleExpenses;
+  const margin = vgv > 0 ? (profit / vgv) * 100 : 0;
+  const monthlyRevenue2027 = builtArea * 36 * 0.95;
+  const costPerBuiltM2 = builtArea > 0 ? totalInvestment / builtArea : 0;
+  const paybackYears = annualNoi > 0 ? totalInvestment / annualNoi : 0;
+  const roiOnSale = totalInvestment > 0 ? (profit / totalInvestment) * 100 : 0;
+  const equityMultiple = totalInvestment > 0 ? (vgv - saleExpenses) / totalInvestment : 0;
+
+  return {
+    builtArea,
+    landCost,
+    futureLandValue,
+    directConstruction,
+    itbi,
+    centralAdmin,
+    localAdmin,
+    postSaleRisk,
+    projectsAndFees,
+    indirectCosts,
+    totalInvestment,
+    monthlyRevenue,
+    annualGrossRevenue,
+    annualNoi,
+    capRate,
+    vgv,
+    saleExpenses,
+    profit,
+    margin,
+    monthlyRevenue2027,
+    safetySpread: futureLandValue - landCost,
+    costPerBuiltM2,
+    paybackYears,
+    roiOnSale,
+    equityMultiple,
+  };
+}
+
 const formatCurrency = (value: number, digits = 0) =>
   value.toLocaleString("pt-BR", {
     style: "currency",
@@ -200,48 +281,19 @@ export default function DashboardClient() {
   const [saleM2, setSaleM2] = useState(6000);
   const builtArea = Math.round(lotArea * (coverage / 100));
 
-  const results = useMemo(() => {
-    const landCost = lotArea * ASSET.landCostM2;
-    const futureLandValue = lotArea * ASSET.landTargetM2;
-    const directConstruction = builtArea * cubM2;
-    const itbi = landCost * COST_RATES.itbi;
-    const centralAdmin = directConstruction * COST_RATES.centralAdmin;
-    const localAdmin = directConstruction * COST_RATES.localAdmin;
-    const postSaleRisk = directConstruction * COST_RATES.postSaleRisk;
-    const projectsAndFees = directConstruction * COST_RATES.projectsAndFees;
-    const indirectCosts = itbi + centralAdmin + localAdmin + postSaleRisk + projectsAndFees;
-    const totalInvestment = landCost + directConstruction + indirectCosts;
-    const monthlyRevenue = builtArea * rentM2 * (occupancy / 100);
-    const annualNoi = monthlyRevenue * 12 * 0.9;
-    const capRate = totalInvestment > 0 ? (annualNoi / totalInvestment) * 100 : 0;
-    const vgv = builtArea * saleM2;
-    const saleExpenses = vgv * (COST_RATES.publicity + COST_RATES.saleTaxes + COST_RATES.brokerage);
-    const profit = vgv - totalInvestment - saleExpenses;
-    const margin = vgv > 0 ? (profit / vgv) * 100 : 0;
-    const monthlyRevenue2027 = builtArea * 36 * 0.95;
+  const results = useMemo(
+    () => calculateFinancials({ lotArea, coverage, cubM2, rentM2, occupancy, saleM2 }),
+    [coverage, cubM2, lotArea, occupancy, rentM2, saleM2],
+  );
 
-    return {
-      landCost,
-      futureLandValue,
-      directConstruction,
-      itbi,
-      centralAdmin,
-      localAdmin,
-      postSaleRisk,
-      projectsAndFees,
-      indirectCosts,
-      totalInvestment,
-      monthlyRevenue,
-      annualNoi,
-      capRate,
-      vgv,
-      saleExpenses,
-      profit,
-      margin,
-      monthlyRevenue2027,
-      safetySpread: futureLandValue - landCost,
-    };
-  }, [builtArea, cubM2, lotArea, occupancy, rentM2, saleM2]);
+  const fractionSummaries = useMemo(
+    () =>
+      LOT_PRESETS.map((area) => ({
+        lotArea: area,
+        ...calculateFinancials({ lotArea: area, coverage, cubM2, rentM2, occupancy, saleM2 }),
+      })),
+    [coverage, cubM2, occupancy, rentM2, saleM2],
+  );
 
   const visibleScenario = SCENARIOS.map((scenario) => {
     const monthly = builtArea * scenario.rentM2 * (scenario.occupancy / 100);
@@ -325,6 +377,25 @@ export default function DashboardClient() {
                       São 128.000 m² de terreno, 68.000 m² úteis e 1.400 m de frente para a Rua Guilherme Scharf.
                       A venda pode acontecer em frações, com vocação para supermercado, posto, varejo e logística.
                     </p>
+                    <div className="mt-5 flex flex-wrap gap-3">
+                      <a
+                        href={WHATSAPP_URL}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 rounded-lg bg-[#f97316] px-4 py-3 text-sm font-black text-white shadow-sm hover:bg-[#ea580c]"
+                      >
+                        <MessageCircle size={18} />
+                        Quero analisar uma fração
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => handleNavClick("Simulador", "simulador")}
+                        className="inline-flex items-center gap-2 rounded-lg border border-[#0b4d8c] bg-white px-4 py-3 text-sm font-black text-[#0b4d8c] hover:bg-[#e9f2ff]"
+                      >
+                        <Calculator size={18} />
+                        Simular investimento
+                      </button>
+                    </div>
                   </div>
                   <div className="grid gap-2 text-sm font-bold text-[#173c68] sm:grid-cols-2 lg:w-[340px]">
                     <MiniProof icon={ShieldCheck} text="Terreno já terraplanado na cota 15" />
@@ -351,6 +422,15 @@ export default function DashboardClient() {
                 </div>
               </div>
             </section>
+
+            <InvestmentOptionsPanel
+              summaries={fractionSummaries}
+              selectedLot={lotArea}
+              onSelect={(area) => {
+                setLotArea(area);
+                handleNavClick("Simulador", "simulador");
+              }}
+            />
 
             <section className="mt-4 grid gap-4 xl:grid-cols-[1.08fr_0.92fr]">
               <MapPanel />
@@ -381,6 +461,8 @@ export default function DashboardClient() {
               <CostsPanel results={results} />
               <InvestorPanel results={results} />
             </section>
+
+            <RiskAndActionPanel />
           </div>
         </section>
       </div>
@@ -412,6 +494,73 @@ function Header() {
         </div>
       </div>
     </header>
+  );
+}
+
+function InvestmentOptionsPanel({
+  summaries,
+  selectedLot,
+  onSelect,
+}: {
+  summaries: Array<SimulationResult & { lotArea: number }>;
+  selectedLot: number;
+  onSelect: (area: number) => void;
+}) {
+  return (
+    <section className="mt-4 rounded-lg border border-[#d9e1ec] bg-white shadow-sm">
+      <div className="grid gap-4 border-b border-[#d9e1ec] p-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <div>
+          <p className="text-sm font-black uppercase text-[#f97316]">Escolha sua fração de investimento</p>
+          <h2 className="mt-2 text-2xl font-black text-[#061d36] sm:text-3xl">
+            A decisão começa pelo tamanho do lote
+          </h2>
+        </div>
+        <p className="text-sm leading-6 text-[#5c6b7d]">
+          Estes cartões usam as mesmas premissas do simulador: compra a R$ 600/m², ocupação do lote,
+          CUB GI/SC, aluguel médio e preço de venda pós-2027. A ideia é comparar opções sem matemática escondida.
+        </p>
+      </div>
+      <div className="grid gap-3 p-4 lg:grid-cols-3">
+        {summaries.map((item) => {
+          const isSelected = selectedLot === item.lotArea;
+          return (
+            <article
+              key={item.lotArea}
+              className={`rounded-lg border p-4 ${
+                isSelected ? "border-[#f97316] bg-[#fff7ed]" : "border-[#d9e1ec] bg-[#f8fafc]"
+              }`}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-black uppercase text-[#6d7a89]">Fração</p>
+                  <p className="mt-1 text-3xl font-black text-[#061d36]">{formatNumber(item.lotArea)} m²</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => onSelect(item.lotArea)}
+                  className={`rounded-lg px-3 py-2 text-xs font-black ${
+                    isSelected ? "bg-[#f97316] text-white" : "bg-white text-[#0b4d8c] ring-1 ring-[#d9e1ec]"
+                  }`}
+                >
+                  Simular
+                </button>
+              </div>
+              <div className="mt-4 grid gap-2 text-sm">
+                <MetricRow label="Aporte total estimado" value={formatCurrency(item.totalInvestment)} />
+                <MetricRow label="Área construída" value={`${formatNumber(item.builtArea)} m²`} />
+                <MetricRow label="Aluguel mensal" value={formatCurrency(item.monthlyRevenue)} />
+                <MetricRow label="Yield on Cost" value={formatPercent(item.capRate)} />
+                <MetricRow label="Lucro na venda" value={formatCurrency(item.profit)} />
+              </div>
+              <div className="mt-4 rounded-lg bg-white p-3 text-xs font-semibold leading-5 text-[#5c6b7d] ring-1 ring-[#d9e1ec]">
+                Payback teórico de {formatNumber(item.paybackYears, 1)} anos pelo NOI e ROI de venda de{" "}
+                {formatPercent(item.roiOnSale)} no cenário selecionado.
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </section>
   );
 }
 
@@ -506,7 +655,7 @@ function SimulatorPanel({
           <div className="rounded-lg border border-[#d9e1ec] bg-[#e9f2ff] p-3">
             <p className="text-xs font-black uppercase text-[#0b4d8c]">Resultado físico do lote</p>
             <p className="mt-1 text-3xl font-black text-[#061d36]">{formatNumber(builtArea)} m² estimados</p>
-            <p className="mt-1 text-sm text-[#5c6b7d]">Área construída estimada para calcular aluguel, ROI, VGV e Cap Rate.</p>
+            <p className="mt-1 text-sm text-[#5c6b7d]">Área construída estimada para calcular aluguel, ROI, VGV e Yield on Cost.</p>
           </div>
           <RangeControl
             label="CUB GI desonerado SC"
@@ -527,8 +676,12 @@ function SimulatorPanel({
         <div className="grid gap-3 sm:grid-cols-2">
           <ResultTile label="Investimento total" value={formatCurrency(results.totalInvestment)} help="Terreno + obra + indiretos" tone="blue" />
           <ResultTile label="Receita mensal" value={formatCurrency(results.monthlyRevenue)} help="Aluguel com ocupação" tone="green" />
+          <ResultTile label="NOI anual" value={formatCurrency(results.annualNoi)} help="Receita anual menos 10% de fricção" tone="green" />
           <ResultTile label="Yield on Cost" value={formatPercent(results.capRate)} help="NOI anual / custo total" tone="orange" />
           <ResultTile label="Lucro estimado" value={formatCurrency(results.profit)} help="Venda menos custos e despesas" tone="green" />
+          <ResultTile label="ROI na venda" value={formatPercent(results.roiOnSale)} help="Lucro / investimento total" tone="orange" />
+          <ResultTile label="Payback teórico" value={`${formatNumber(results.paybackYears, 1)} anos`} help="Investimento / NOI anual" tone="blue" />
+          <ResultTile label="Custo por m² pronto" value={formatCurrency(results.costPerBuiltM2)} help="Custo total / área construída" tone="blue" />
           <div className="rounded-lg border border-[#d9e1ec] bg-[#f6f9fc] p-4 sm:col-span-2">
             <div className="flex items-center justify-between gap-4">
               <div>
@@ -542,6 +695,83 @@ function SimulatorPanel({
               acima de 8% fica bom para renda comercial/logística, desde que a locação seja realista.
             </p>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function RiskAndActionPanel() {
+  const risks = [
+    {
+      title: "Prazo do viaduto",
+      copy: "A tese de valorização depende da entrega e do efeito real da nova mobilidade. A data deve ser acompanhada como marco de decisão.",
+    },
+    {
+      title: "Custo real da obra",
+      copy: "CUB é referência, não orçamento executivo. Supermercado, posto e varejo podem exigir padrão construtivo e infraestrutura diferentes.",
+    },
+    {
+      title: "Velocidade de locação",
+      copy: "O aluguel projetado só vira retorno com ocupação. O simulador permite reduzir ocupação para enxergar um cenário mais prudente.",
+    },
+    {
+      title: "Preço de saída",
+      copy: "R$ 1.800/m² é tese de valor patrimonial, não garantia. O preço final dependerá de mercado, acesso, demanda e negociação.",
+    },
+  ];
+
+  return (
+    <section className="mt-4 grid gap-4 xl:grid-cols-[0.95fr_1.05fr]">
+      <div className="rounded-lg border border-[#d9e1ec] bg-white p-4 shadow-sm">
+        <div className="flex items-center gap-2">
+          <Clock3 className="text-[#f97316]" size={22} />
+          <h2 className="text-lg font-black text-[#061d36]">Por que o preço ainda existe?</h2>
+        </div>
+        <div className="mt-4 grid gap-3">
+          <Argument
+            title="1. Evento ainda não totalmente precificado"
+            copy="O viaduto previsto para outubro de 2027 é o gatilho. Antes da entrega, a leitura de valor ainda exige visão de futuro."
+          />
+          <Argument
+            title="2. Área grande permite negociação em frações"
+            copy="O terreno total é amplo, mas a compra pode ser estruturada por lotes menores, abrindo espaço para diferentes perfis de investidor."
+          />
+          <Argument
+            title="3. Produto ainda precisa ser empacotado"
+            copy="A oportunidade ganha liquidez quando vira uma tese simples: fração, vocação, custo, renda, risco e saída."
+          />
+        </div>
+      </div>
+
+      <div className="rounded-lg border border-[#d9e1ec] bg-white p-4 shadow-sm">
+        <div className="flex items-center gap-2">
+          <AlertTriangle className="text-[#f97316]" size={22} />
+          <h2 className="text-lg font-black text-[#061d36]">Riscos que o investidor deve enxergar</h2>
+        </div>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          {risks.map((risk) => (
+            <article key={risk.title} className="rounded-lg border border-[#d9e1ec] bg-[#f8fafc] p-3">
+              <p className="font-black text-[#061d36]">{risk.title}</p>
+              <p className="mt-1 text-sm leading-6 text-[#5c6b7d]">{risk.copy}</p>
+            </article>
+          ))}
+        </div>
+        <div className="mt-4 rounded-lg bg-[#061d36] p-4 text-white">
+          <p className="text-sm font-black uppercase text-[#ffb15f]">Próximo passo comercial</p>
+          <p className="mt-2 text-2xl font-black">Receber estudo da fração no WhatsApp</p>
+          <p className="mt-2 text-sm leading-6 text-white/75">
+            O investidor deve sair da página com uma decisão simples: escolher uma fração e pedir a simulação personalizada.
+          </p>
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-[#f97316] px-4 py-3 text-sm font-black text-white hover:bg-[#ea580c]"
+          >
+            <MessageCircle size={18} />
+            Solicitar simulação agora
+          </a>
         </div>
       </div>
     </section>
@@ -565,8 +795,8 @@ function MarketPanel() {
             );
           })}
         </div>
-        <div className="overflow-hidden rounded-lg border border-[#d9e1ec]">
-          <table className="w-full border-collapse text-left text-sm">
+        <div className="overflow-x-auto rounded-lg border border-[#d9e1ec]">
+          <table className="min-w-[720px] w-full border-collapse text-left text-sm">
             <thead className="bg-[#061d36] text-white">
               <tr>
                 <th className="p-3">Módulo</th>
@@ -678,13 +908,13 @@ function CostsPanel({ results }: { results: SimulationResult }) {
         </div>
         <div className="space-y-2">
           {indirect.map(([label, rate, value, note]) => (
-            <div key={String(label)} className="grid grid-cols-[1fr_80px_120px] items-center gap-3 rounded-lg border border-[#d9e1ec] p-3 text-sm">
+            <div key={String(label)} className="grid gap-2 rounded-lg border border-[#d9e1ec] p-3 text-sm sm:grid-cols-[1fr_80px_120px] sm:items-center sm:gap-3">
               <div>
                 <p className="font-black text-[#061d36]">{label}</p>
                 <p className="text-xs text-[#6d7a89]">{note}</p>
               </div>
-              <p className="text-right font-black text-[#f97316]">{formatPercent(Number(rate) * 100)}</p>
-              <p className="text-right font-black text-[#0b4d8c]">{formatCurrency(Number(value))}</p>
+              <p className="font-black text-[#f97316] sm:text-right">{formatPercent(Number(rate) * 100)}</p>
+              <p className="font-black text-[#0b4d8c] sm:text-right">{formatCurrency(Number(value))}</p>
             </div>
           ))}
           <div className="rounded-lg border border-[#f97316]/35 bg-[#fff7ed] p-3">
