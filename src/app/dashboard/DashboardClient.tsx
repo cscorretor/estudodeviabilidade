@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import carlitoLogo from "../../../public/carlito-logo-investidor.png";
+import rotulaMap from "../../../public/rotula-guilherme-scharf.jpeg";
 import {
   ArrowUpRight,
   BadgeDollarSign,
@@ -393,7 +395,7 @@ function Header() {
         </div>
         <div className="rounded-lg bg-white px-3 py-1 shadow-sm ring-1 ring-[#d9e1ec]">
           <Image
-            src="/carlito-logo-investidor.png"
+            src={carlitoLogo}
             alt="Carlito de Souza Corretor de Imóveis"
             width={210}
             height={72}
@@ -413,7 +415,7 @@ function MapPanel() {
       <div className="grid gap-0 lg:grid-cols-[1fr_230px]">
         <div className="relative min-h-[360px] overflow-hidden bg-[#dde8f2]">
           <Image
-            src="/rotula-guilherme-scharf.jpeg"
+            src={rotulaMap}
             alt="Desenho da área ancorada na rótula da Rua Guilherme Scharf"
             fill
             priority
@@ -768,7 +770,7 @@ function PanelHeader({ icon: Icon, title }: { icon: typeof MapPinned; title: str
         <h2 className="text-sm font-black uppercase">{title}</h2>
       </div>
       <Image
-        src="/carlito-logo-investidor.png"
+        src={carlitoLogo}
         alt="Carlito de Souza"
         width={120}
         height={42}
