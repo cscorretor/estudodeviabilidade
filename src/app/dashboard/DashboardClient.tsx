@@ -626,8 +626,8 @@ function InvestmentThesisPanel() {
           <h2 className="mt-2 text-2xl font-black sm:text-3xl">O que precisa ficar na cabeça do investidor</h2>
         </div>
         <p className="text-sm leading-6 text-white/72">
-          A página agora conduz a leitura como um deck: primeiro a tese, depois a fração, em seguida os números,
-          os riscos e o próximo passo. Menos promessa, mais estrutura de decisão.
+          A oportunidade combina localização com exposição comercial, evento de infraestrutura e entrada antes da
+          possível reprecificação do corredor. O investidor pode analisar renda, valorização e liquidez por fração.
         </p>
       </div>
       <div className="grid gap-px bg-white/10 md:grid-cols-2 xl:grid-cols-4">
