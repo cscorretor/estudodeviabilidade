@@ -2,29 +2,24 @@
 /* eslint-disable @next/next/no-img-element -- Logo uses a fixed public path to stay reliable on GitHub Pages. */
 
 import Image from "next/image";
-import rotulaMap from "../../../public/rotula-guilherme-scharf.jpeg";
+import plantaReal from "../../../public/planta-real-guilherme-scharf.png";
 import {
   AlertTriangle,
   ArrowUpRight,
-  BadgeDollarSign,
   BarChart3,
   Calculator,
   CheckCircle2,
   Clock3,
-  FileText,
   Fuel,
   Gauge,
   Landmark,
   MapPinned,
   MessageCircle,
-  PackageCheck,
   Presentation,
-  Route,
   ShieldCheck,
   ShoppingCart,
   SlidersHorizontal,
   Store,
-  Target,
   Truck,
 } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -328,125 +323,80 @@ export default function DashboardClient() {
   };
 
   return (
-    <main className="min-h-screen bg-[#eef3f8] text-[#10243d]">
-      <div className="grid min-h-screen lg:grid-cols-[224px_1fr]">
-        <aside className="hidden border-r border-[#d9e1ec] bg-[#061d36] text-white lg:block">
-          <div className="flex h-full flex-col">
-            <div className="border-b border-white/10 p-5">
-              <p className="text-xs font-bold uppercase text-white/55">Business Case</p>
-              <p className="mt-1 text-lg font-black">Guilherme Scharf</p>
-            </div>
-            <nav className="flex-1 space-y-1 p-3">
-              {nav.map((item) => {
-                const Icon = item.icon;
-                const isActive = activeSection === item.label;
-                return (
-                  <button
-                    type="button"
-                    key={item.label}
-                    onClick={() => handleNavClick(item.label, item.id)}
-                    className={`flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm font-bold ${
-                      isActive ? "bg-[#f97316] text-white" : "text-white/78 hover:bg-white/8"
-                    }`}
-                  >
-                    <Icon size={18} />
-                    {item.label}
-                  </button>
-                );
-              })}
-            </nav>
-            <div className="m-3 rounded-lg border border-[#f97316]/70 p-4">
-              <p className="text-xs font-bold uppercase text-white/55">Contato</p>
-              <p className="mt-2 text-xl font-black">47 99192-6000</p>
-              <p className="mt-1 text-xs text-white/65">Carlito de Souza | CRECI 6894F</p>
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#f97316] px-3 py-2 text-xs font-black text-white hover:bg-[#ea580c]"
-              >
-                <MessageCircle size={16} />
-                Chamar no WhatsApp
-              </a>
-            </div>
-          </div>
-        </aside>
+    <main className="min-h-screen bg-[#f4f7fa] text-[#10243d]">
+      <Header nav={nav} activeSection={activeSection} onNavClick={handleNavClick} />
 
-        <section className="min-w-0">
-          <Header />
-
-          <div className="mx-auto max-w-[1480px] px-4 py-5 sm:px-6 lg:px-7">
-            <section id="visao-geral" className="grid scroll-mt-20 gap-4 xl:grid-cols-[1fr_440px]">
-              <div className="rounded-lg border border-[#d9e1ec] bg-white p-5 shadow-sm">
-                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                  <div>
-                    <h1 className="text-3xl font-black tracking-tight text-[#061d36] sm:text-5xl">
-                      Janela de entrada antes do novo eixo da Via-Expressa
-                    </h1>
-                    <p className="mt-3 max-w-4xl text-base leading-7 text-[#5c6b7d]">
-                      A área na rótula da Rua Guilherme Scharf combina preço de entrada, frente comercial e evento
-                      urbano relevante. A tese é simples: comprar frações antes da infraestrutura estar plenamente
-                      precificada e estruturar renda com vocação para varejo, serviços e logística.
-                    </p>
-                    <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                      <HeroProof label="Entrada" value="R$ 600/m²" copy="Cota atual da fração" />
-                      <HeroProof label="Tese patrimonial" value="R$ 1.800/m²" copy="Cenário-alvo pós-2027" />
-                      <HeroProof label="Frente estratégica" value="1.400 m" copy="Exposição para a via" />
-                    </div>
-                    <div className="mt-5 flex flex-wrap gap-3">
-                      <a
-                        href={WHATSAPP_URL}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-2 rounded-lg bg-[#f97316] px-4 py-3 text-sm font-black text-white shadow-sm hover:bg-[#ea580c]"
-                      >
-                        <MessageCircle size={18} />
-                        Quero analisar uma fração
-                      </a>
-                      <button
-                        type="button"
-                        onClick={() => handleNavClick("Simulador", "simulador")}
-                        className="inline-flex items-center gap-2 rounded-lg border border-[#0b4d8c] bg-white px-4 py-3 text-sm font-black text-[#0b4d8c] hover:bg-[#e9f2ff]"
-                      >
-                        <Calculator size={18} />
-                        Simular investimento
-                      </button>
-                    </div>
-                  </div>
-                  <div className="grid gap-2 text-sm font-bold text-[#173c68] sm:grid-cols-2 lg:w-[340px]">
-                    <MiniProof icon={ShieldCheck} text="Terreno já terraplanado na cota 15" />
-                    <MiniProof icon={FileText} text="Licenciado para uso logístico e comercial" />
-                    <MiniProof icon={Route} text="Rótula + Via-Expressa como gatilho de fluxo" />
-                    <MiniProof icon={PackageCheck} text="Varejo, posto, serviços e galpões modulares" />
+      <div className="mx-auto max-w-[1500px] px-4 py-5 sm:px-6 lg:px-8">
+            <section
+              id="visao-geral"
+              className="relative isolate grid min-h-[680px] scroll-mt-24 overflow-hidden rounded-[2px] bg-[#061d36] shadow-2xl xl:grid-cols-[1.03fr_0.97fr]"
+            >
+              <Image
+                src={plantaReal}
+                alt="Planta aérea real do terreno na Rua Guilherme Scharf"
+                fill
+                priority
+                className="object-cover opacity-70"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,29,54,0.98)_0%,rgba(6,29,54,0.90)_34%,rgba(6,29,54,0.55)_64%,rgba(6,29,54,0.18)_100%)]" />
+              <div className="relative z-10 flex flex-col justify-between p-6 text-white sm:p-8 lg:p-12">
+                <div>
+                  <p className="max-w-fit border-l-4 border-[#f97316] pl-3 text-xs font-black uppercase tracking-[0.22em] text-[#ffb15f]">
+                    Memorando de investimento imobiliário
+                  </p>
+                  <h1 className="mt-6 max-w-4xl text-4xl font-black leading-[0.96] tracking-tight sm:text-6xl lg:text-7xl">
+                    Guilherme Scharf antes da reprecificação do corredor
+                  </h1>
+                  <p className="mt-6 max-w-2xl text-base leading-8 text-white/76 sm:text-lg">
+                    Frações comerciais com frente estratégica, tese de renda e potencial patrimonial associado à
+                    conexão com a Via-Expressa. Um ativo para quem busca entrar antes da maturação urbana da região.
+                  </p>
+                  <div className="mt-8 flex flex-wrap gap-3">
+                    <a
+                      href={WHATSAPP_URL}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full bg-[#f97316] px-5 py-3 text-sm font-black text-white shadow-lg shadow-black/20 hover:bg-[#ea580c]"
+                    >
+                      <MessageCircle size={18} />
+                      Quero analisar uma fração
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => handleNavClick("Simulador", "simulador")}
+                      className="inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/10 px-5 py-3 text-sm font-black text-white backdrop-blur hover:bg-white/18"
+                    >
+                      <Calculator size={18} />
+                      Simular investimento
+                    </button>
                   </div>
                 </div>
-
-                <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                  <Kpi icon={MapPinned} label="Área total" value={`${formatNumber(ASSET.totalArea)} m²`} help="Escala para múltiplas operações" tone="blue" />
-                  <Kpi icon={Target} label="Área útil" value={`${formatNumber(ASSET.usefulArea)} m²`} help="Base real de aproveitamento" tone="green" />
-                  <Kpi icon={Route} label="Frente para rua" value={`${formatNumber(ASSET.frontage)} m`} help="Frente na Guilherme Scharf" tone="orange" />
-                  <Kpi icon={BadgeDollarSign} label="Compra atual" value="R$ 600/m²" help="Cota de entrada da fração" tone="blue" />
+                <div className="mt-10 grid gap-3 sm:grid-cols-3">
+                  <HeroProof label="Entrada" value="R$ 600/m²" copy="Cota atual da fração" tone="dark" />
+                  <HeroProof label="Cenário-alvo" value="R$ 1.800/m²" copy="Tese patrimonial pós-2027" tone="dark" />
+                  <HeroProof label="Frente" value="1.400 m" copy="Exposição para a Guilherme Scharf" tone="dark" />
                 </div>
               </div>
-
-              <div className="rounded-lg border border-[#14385f] bg-[#061d36] p-5 text-white shadow-sm">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#f97316]">
-                    <Presentation size={20} />
+              <div className="relative z-10 flex items-end p-6 sm:p-8 lg:p-12">
+                <div className="w-full border border-white/18 bg-white/10 p-5 text-white shadow-2xl backdrop-blur-md">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-11 w-11 items-center justify-center bg-[#f97316]">
+                      <Presentation size={22} />
+                    </div>
+                    <div>
+                      <p className="text-xs font-black uppercase tracking-[0.18em] text-[#ffb15f]">Tese em 30 segundos</p>
+                      <p className="text-xl font-black">Renda mensal + valorização patrimonial</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-black uppercase text-[#ffb15f]">Tese em 30 segundos</p>
-                    <p className="text-lg font-black">Renda mensal + valorização patrimonial</p>
+                  <div className="mt-5 grid gap-3">
+                    <ValueStep number="1" title="Comprar antes do evento" copy="Entrada antes da conclusão prevista do viaduto, quando a tese ainda não foi totalmente absorvida pelo preço." />
+                    <ValueStep number="2" title="Transformar frente em renda" copy="A frente de 1.400 m permite modular supermercado, posto, serviços, varejo e logística urbana." />
+                    <ValueStep number="3" title="Ter duas saídas" copy="Aluguel recorrente ou venda futura com VGV maior quando o corredor estiver mais maduro." />
                   </div>
-                </div>
-                <div className="mt-4 grid gap-3">
-                  <ValueStep number="1" title="Comprar antes do evento" copy="A entrada acontece antes da conclusão prevista do viaduto, quando a tese ainda não foi totalmente absorvida pelo preço." />
-                  <ValueStep number="2" title="Transformar frente em renda" copy="A frente de 1.400 m permite modular vocações: supermercado, posto, serviços, varejo e logística urbana." />
-                  <ValueStep number="3" title="Ter duas saídas" copy="O investidor pode buscar aluguel recorrente ou venda futura com VGV maior quando o corredor estiver mais maduro." />
-                </div>
-                <div className="mt-4 rounded-lg bg-white/8 p-3 text-xs font-semibold leading-5 text-white/70">
-                  Premissa, não promessa: os cenários dependem de custo executivo, ocupação, prazo da infraestrutura e
-                  mercado de locação no momento da implantação.
+                  <div className="mt-5 border-t border-white/14 pt-4 text-xs font-semibold leading-5 text-white/68">
+                    Premissa, não promessa: os cenários dependem de custo executivo, ocupação, prazo da infraestrutura
+                    e mercado de locação no momento da implantação.
+                  </div>
                 </div>
               </div>
             </section>
@@ -493,35 +443,64 @@ export default function DashboardClient() {
             </section>
 
             <RiskAndActionPanel />
-          </div>
-        </section>
       </div>
     </main>
   );
 }
 
-function Header() {
+function Header({
+  nav,
+  activeSection,
+  onNavClick,
+}: {
+  nav: Array<{ label: string; icon: typeof MapPinned; id: string }>;
+  activeSection: string;
+  onNavClick: (label: string, id: string) => void;
+}) {
   return (
-    <header className="sticky top-0 z-30 border-b border-[#d9e1ec] bg-white/92 backdrop-blur">
-      <div className="mx-auto flex max-w-[1480px] items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-7">
+    <header className="sticky top-0 z-40 border-b border-[#d9e1ec] bg-white/94 backdrop-blur">
+      <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
         <div className="flex min-w-0 items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#0b4d8c] text-white">
-            <MapPinned size={20} />
-          </div>
-          <div className="min-w-0">
-            <p className="truncate text-sm font-black text-[#061d36]">Rua Guilherme Scharf, Blumenau - SC</p>
-            <p className="text-xs font-semibold text-[#6d7a89]">Coordenadas: {ASSET.coordinates} | Viaduto previsto: {ASSET.viaductDate}</p>
-          </div>
-        </div>
-        <div className="rounded-lg bg-white px-3 py-1 shadow-sm ring-1 ring-[#d9e1ec]">
           <img
             src={logoSrc}
             alt="Carlito de Souza Corretor de Imóveis"
             width={210}
             height={72}
-            className="h-auto w-[118px] sm:w-[158px]"
+            className="h-auto w-[130px] sm:w-[170px]"
           />
+          <div className="min-w-0">
+            <p className="hidden text-xs font-black uppercase tracking-[0.18em] text-[#0b4d8c] sm:block">
+              Investment memo imobiliário
+            </p>
+            <p className="hidden text-xs font-semibold text-[#6d7a89] md:block">
+              Rua Guilherme Scharf, Blumenau - SC
+            </p>
+          </div>
         </div>
+        <nav className="hidden items-center gap-1 rounded-full border border-[#d9e1ec] bg-[#f8fafc] p-1 lg:flex">
+          {nav.map((item) => (
+            <button
+              type="button"
+              key={item.label}
+              onClick={() => onNavClick(item.label, item.id)}
+              className={`rounded-full px-3 py-2 text-xs font-black ${
+                activeSection === item.label ? "bg-[#061d36] text-white" : "text-[#5c6b7d] hover:bg-white hover:text-[#061d36]"
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </nav>
+        <a
+          href={WHATSAPP_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-2 rounded-full bg-[#f97316] px-4 py-2 text-xs font-black text-white shadow-sm hover:bg-[#ea580c]"
+        >
+          <MessageCircle size={16} />
+          <span className="hidden sm:inline">Falar com Carlito</span>
+          <span className="sm:hidden">Contato</span>
+        </a>
       </div>
     </header>
   );
@@ -646,12 +625,12 @@ function InvestmentThesisPanel() {
 function MapPanel() {
   return (
     <section id="localizacao" className="scroll-mt-20 overflow-hidden rounded-lg border border-[#d9e1ec] bg-white shadow-sm">
-      <PanelHeader icon={MapPinned} title="Localização principal: área da rótula" />
+      <PanelHeader icon={MapPinned} title="Planta real do ativo e frente comercial" />
       <div className="grid gap-0 lg:grid-cols-[1fr_230px]">
-        <div className="relative min-h-[360px] overflow-hidden bg-[#dde8f2]">
+        <div className="relative min-h-[440px] overflow-hidden bg-[#dde8f2]">
           <Image
-            src={rotulaMap}
-            alt="Desenho da área ancorada na rótula da Rua Guilherme Scharf"
+            src={plantaReal}
+            alt="Planta real do terreno com frente para a Rua Guilherme Scharf"
             fill
             priority
             className="object-cover"
@@ -1047,38 +1026,27 @@ function InvestorPanel({ results }: { results: SimulationResult }) {
   );
 }
 
-function Kpi({
-  icon: Icon,
+function HeroProof({
   label,
   value,
-  help,
-  tone,
+  copy,
+  tone = "light",
 }: {
-  icon: typeof MapPinned;
   label: string;
   value: string;
-  help: string;
-  tone: "blue" | "green" | "orange";
+  copy: string;
+  tone?: "light" | "dark";
 }) {
-  const color = {
-    blue: "bg-[#e9f2ff] text-[#0b4d8c]",
-    green: "bg-[#eaf8ef] text-[#15803d]",
-    orange: "bg-[#fff1df] text-[#f97316]",
-  }[tone];
-
-  return (
-    <article className="rounded-lg border border-[#d9e1ec] bg-[#f8fafc] p-4">
-      <div className={`mb-3 flex h-11 w-11 items-center justify-center rounded-lg ${color}`}>
-        <Icon size={22} />
+  if (tone === "dark") {
+    return (
+      <div className="border border-white/16 bg-white/10 p-4 backdrop-blur">
+        <p className="text-xs font-black uppercase tracking-[0.16em] text-[#ffb15f]">{label}</p>
+        <p className="mt-2 text-3xl font-black text-white">{value}</p>
+        <p className="mt-1 text-xs font-semibold leading-5 text-white/68">{copy}</p>
       </div>
-      <p className="text-xs font-black uppercase text-[#6d7a89]">{label}</p>
-      <p className="mt-1 text-3xl font-black text-[#061d36]">{value}</p>
-      <p className="mt-1 text-sm text-[#6d7a89]">{help}</p>
-    </article>
-  );
-}
+    );
+  }
 
-function HeroProof({ label, value, copy }: { label: string; value: string; copy: string }) {
   return (
     <div className="rounded-lg border border-[#d9e1ec] bg-[#f8fafc] p-3">
       <p className="text-xs font-black uppercase text-[#6d7a89]">{label}</p>
@@ -1102,15 +1070,6 @@ function PanelHeader({ icon: Icon, title }: { icon: typeof MapPinned; title: str
         height={42}
         className="hidden h-auto w-[86px] rounded-sm bg-white px-2 py-1 sm:block"
       />
-    </div>
-  );
-}
-
-function MiniProof({ icon: Icon, text }: { icon: typeof MapPinned; text: string }) {
-  return (
-    <div className="flex items-center gap-2 rounded-lg border border-[#d9e1ec] bg-[#f8fafc] p-3">
-      <Icon size={17} className="shrink-0 text-[#f97316]" />
-      <span>{text}</span>
     </div>
   );
 }
