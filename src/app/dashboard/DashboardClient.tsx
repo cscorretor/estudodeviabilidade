@@ -323,7 +323,7 @@ export default function DashboardClient() {
   };
 
   return (
-    <main className="min-h-screen bg-[#06111f] text-[#10243d]">
+    <main className="min-h-screen bg-[#06111f] text-[#10243d] xl:pl-[260px]">
       <Header nav={nav} activeSection={activeSection} onNavClick={handleNavClick} />
 
       <div className="mx-auto max-w-[1580px] px-4 py-5 sm:px-6 lg:px-8">
@@ -461,9 +461,58 @@ function Header({
   onNavClick: (label: string, id: string) => void;
 }) {
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#06111f]/94 text-white backdrop-blur">
-      <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
-        <div className="flex min-w-0 items-center gap-3">
+    <>
+      <aside className="fixed inset-y-0 left-0 z-50 hidden w-[260px] flex-col border-r border-white/10 bg-[#06111f] text-white shadow-[26px_0_70px_rgba(0,0,0,0.24)] xl:flex">
+        <div className="border-b border-white/10 p-6">
+          <img
+            src={logoSrc}
+            alt="Carlito de Souza Corretor de Imóveis"
+            width={210}
+            height={72}
+            className="h-auto w-[178px] rounded-[2px] bg-white px-3 py-2"
+          />
+          <p className="mt-5 text-xs font-black uppercase tracking-[0.22em] text-[#ffb15f]">Business case</p>
+          <p className="mt-2 text-2xl font-black leading-tight">Guilherme Scharf</p>
+          <p className="mt-2 text-xs font-semibold leading-5 text-white/52">Blumenau - SC | Frações comerciais para investidores</p>
+        </div>
+        <nav className="flex-1 space-y-1 p-4">
+          {nav.map((item) => {
+            const Icon = item.icon;
+            const active = activeSection === item.label;
+            return (
+              <button
+                type="button"
+                key={item.label}
+                onClick={() => onNavClick(item.label, item.id)}
+                className={`flex w-full items-center gap-3 rounded-[2px] px-4 py-3 text-left text-sm font-black transition ${
+                  active ? "bg-[#f97316] text-white shadow-[0_16px_32px_rgba(249,115,22,0.22)]" : "text-white/66 hover:bg-white/10 hover:text-white"
+                }`}
+              >
+                <Icon size={19} />
+                {item.label}
+              </button>
+            );
+          })}
+        </nav>
+        <div className="p-4">
+          <div className="rounded-[2px] border border-white/12 bg-white/5 p-4">
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-[#ffb15f]">Atendimento exclusivo</p>
+            <p className="mt-2 text-sm leading-6 text-white/64">Receba a simulação personalizada e o mapa da fração.</p>
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-[2px] bg-[#f97316] px-4 py-3 text-sm font-black text-white hover:bg-[#ea580c]"
+            >
+              <MessageCircle size={17} />
+              Solicitar análise
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-[#06111f]/94 text-white backdrop-blur xl:hidden">
+        <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
           <img
             src={logoSrc}
             alt="Carlito de Souza Corretor de Imóveis"
@@ -471,41 +520,18 @@ function Header({
             height={72}
             className="h-auto w-[130px] rounded-[2px] bg-white px-3 py-2 sm:w-[170px]"
           />
-          <div className="min-w-0">
-            <p className="hidden text-xs font-black uppercase tracking-[0.18em] text-[#ffb15f] sm:block">
-              Investment memo
-            </p>
-            <p className="hidden text-xs font-semibold text-white/58 md:block">
-              Rua Guilherme Scharf, Blumenau - SC
-            </p>
-          </div>
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-full bg-[#f97316] px-4 py-2 text-xs font-black text-white shadow-sm hover:bg-[#ea580c]"
+          >
+            <MessageCircle size={16} />
+            <span>Contato</span>
+          </a>
         </div>
-        <nav className="hidden items-center gap-1 rounded-full border border-white/12 bg-white/5 p-1 lg:flex">
-          {nav.map((item) => (
-            <button
-              type="button"
-              key={item.label}
-              onClick={() => onNavClick(item.label, item.id)}
-              className={`rounded-full px-3 py-2 text-xs font-black ${
-                activeSection === item.label ? "bg-[#f97316] text-white" : "text-white/62 hover:bg-white/10 hover:text-white"
-              }`}
-            >
-              {item.label}
-            </button>
-          ))}
-        </nav>
-        <a
-          href={WHATSAPP_URL}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-2 rounded-full bg-[#f97316] px-4 py-2 text-xs font-black text-white shadow-sm hover:bg-[#ea580c]"
-        >
-          <MessageCircle size={16} />
-          <span className="hidden sm:inline">Falar com Carlito</span>
-          <span className="sm:hidden">Contato</span>
-        </a>
-      </div>
-    </header>
+      </header>
+    </>
   );
 }
 
