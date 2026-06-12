@@ -412,7 +412,7 @@ export default function DashboardClient() {
 
             <InvestmentThesisPanel />
 
-            <section className="mt-4 grid gap-4 xl:grid-cols-[1.08fr_0.92fr]">
+            <section className="mt-4 grid items-start gap-4 xl:grid-cols-[1.08fr_0.92fr]">
               <MapPanel />
               <SimulatorPanel
                 lotArea={lotArea}
@@ -432,12 +432,12 @@ export default function DashboardClient() {
               />
             </section>
 
-            <section className="mt-4 grid gap-4 xl:grid-cols-[0.95fr_1.05fr]">
+            <section className="mt-4 grid items-start gap-4 xl:grid-cols-[0.95fr_1.05fr]">
               <MarketPanel />
               <ScenarioPanel scenarios={visibleScenario} />
             </section>
 
-            <section className="mt-4 grid gap-4 xl:grid-cols-[1.08fr_0.92fr]">
+            <section className="mt-4 grid items-start gap-4 xl:grid-cols-[1.08fr_0.92fr]">
               <CostsPanel results={results} />
               <InvestorPanel results={results} />
             </section>
@@ -516,8 +516,8 @@ function InvestmentOptionsPanel({
   onSelect: (area: number) => void;
 }) {
   return (
-    <section className="mt-4 rounded-lg border border-[#d9e1ec] bg-white shadow-sm">
-      <div className="grid gap-4 border-b border-[#d9e1ec] p-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+    <section className="mt-4 overflow-hidden rounded-[2px] border border-[#d9e1ec] bg-white shadow-[0_18px_48px_rgba(6,29,54,0.08)]">
+      <div className="grid gap-4 border-b border-[#d9e1ec] bg-[linear-gradient(90deg,#ffffff_0%,#f7fbff_100%)] p-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
         <div>
           <p className="text-sm font-black uppercase text-[#f97316]">Escolha sua fração de investimento</p>
           <h2 className="mt-2 text-2xl font-black text-[#061d36] sm:text-3xl">
@@ -525,20 +525,23 @@ function InvestmentOptionsPanel({
           </h2>
         </div>
         <p className="text-sm leading-6 text-[#5c6b7d]">
-          Estes cartões usam as mesmas premissas do simulador: compra a R$ 600/m², ocupação do lote,
-          CUB GI/SC, aluguel médio e preço de venda pós-2027. A ideia é comparar opções sem matemática escondida.
+          Três portas de entrada para a mesma tese: menor exposição, equilíbrio ou escala. Cada fração compara
+          capital estimado, renda mensal e potencial de saída patrimonial com premissas abertas ao investidor.
         </p>
       </div>
-      <div className="grid gap-3 p-4 lg:grid-cols-3">
+      <div className="grid gap-3 p-5 lg:grid-cols-3">
         {summaries.map((item) => {
           const isSelected = selectedLot === item.lotArea;
           return (
             <article
               key={item.lotArea}
-              className={`rounded-lg border p-4 ${
-                isSelected ? "border-[#f97316] bg-[#fff7ed]" : "border-[#d9e1ec] bg-[#f8fafc]"
+              className={`relative overflow-hidden rounded-[2px] border p-5 transition ${
+                isSelected
+                  ? "border-[#f97316] bg-[#fff7ed] shadow-[0_18px_38px_rgba(249,115,22,0.12)]"
+                  : "border-[#d9e1ec] bg-[#f8fafc] hover:border-[#b8c8da]"
               }`}
             >
+              {isSelected ? <div className="absolute inset-x-0 top-0 h-1 bg-[#f97316]" /> : null}
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="text-xs font-black uppercase text-[#6d7a89]">Fração</p>
@@ -547,7 +550,7 @@ function InvestmentOptionsPanel({
                 <button
                   type="button"
                   onClick={() => onSelect(item.lotArea)}
-                  className={`rounded-lg px-3 py-2 text-xs font-black ${
+                  className={`rounded-full px-4 py-2 text-xs font-black ${
                     isSelected ? "bg-[#f97316] text-white" : "bg-white text-[#0b4d8c] ring-1 ring-[#d9e1ec]"
                   }`}
                 >
@@ -624,10 +627,10 @@ function InvestmentThesisPanel() {
 
 function MapPanel() {
   return (
-    <section id="localizacao" className="scroll-mt-20 overflow-hidden rounded-lg border border-[#d9e1ec] bg-white shadow-sm">
+    <section id="localizacao" className="scroll-mt-20 self-start overflow-hidden rounded-[2px] border border-[#d9e1ec] bg-white shadow-sm">
       <PanelHeader icon={MapPinned} title="Planta real do ativo e frente comercial" />
       <div className="grid gap-0 lg:grid-cols-[1fr_230px]">
-        <div className="relative min-h-[440px] overflow-hidden bg-[#dde8f2]">
+        <div className="relative min-h-[460px] overflow-hidden bg-[#dde8f2]">
           <Image
             src={plantaReal}
             alt="Planta real do terreno com frente para a Rua Guilherme Scharf"
@@ -641,7 +644,7 @@ function MapPanel() {
             <p className="text-sm text-white/78">68.000 m² úteis | 1.400 m de frente</p>
           </div>
         </div>
-        <div className="grid border-t border-[#d9e1ec] lg:border-l lg:border-t-0">
+        <div className="grid self-start border-t border-[#d9e1ec] lg:border-l lg:border-t-0">
           <LocationFact icon={ShoppingCart} title="Varejo ancora" copy="A frente e o fluxo favorecem supermercado, atacarejo leve e lojas de destino." />
           <LocationFact icon={Fuel} title="Posto e conveniência" copy="A rótula cria parada natural para veículos, serviços rápidos e alimentação." />
           <LocationFact icon={ArrowUpRight} title="Venda em frações" copy="A área total mostra escala, mas a proposta comercial vende opções menores." />
@@ -683,7 +686,7 @@ function SimulatorPanel({
   results: SimulationResult;
 }) {
   return (
-    <section id="simulador" className="scroll-mt-20 rounded-lg border border-[#d9e1ec] bg-white shadow-sm">
+    <section id="simulador" className="scroll-mt-20 self-start rounded-[2px] border border-[#d9e1ec] bg-white shadow-sm">
       <PanelHeader icon={SlidersHorizontal} title="Simulador de viabilidade por fração" />
       <div className="grid gap-4 p-4 lg:grid-cols-[1fr_0.95fr]">
         <div className="space-y-3">
@@ -780,8 +783,8 @@ function RiskAndActionPanel() {
   ];
 
   return (
-    <section className="mt-4 grid gap-4 xl:grid-cols-[0.95fr_1.05fr]">
-      <div className="rounded-lg border border-[#d9e1ec] bg-white p-4 shadow-sm">
+    <section className="mt-4 grid items-start gap-4 xl:grid-cols-[0.95fr_1.05fr]">
+      <div className="self-start rounded-[2px] border border-[#d9e1ec] bg-white p-4 shadow-sm">
         <div className="flex items-center gap-2">
           <Clock3 className="text-[#f97316]" size={22} />
           <h2 className="text-lg font-black text-[#061d36]">Por que o preço ainda existe?</h2>
@@ -802,7 +805,7 @@ function RiskAndActionPanel() {
         </div>
       </div>
 
-      <div className="rounded-lg border border-[#d9e1ec] bg-white p-4 shadow-sm">
+      <div className="self-start rounded-[2px] border border-[#d9e1ec] bg-white p-4 shadow-sm">
         <div className="flex items-center gap-2">
           <AlertTriangle className="text-[#f97316]" size={22} />
           <h2 className="text-lg font-black text-[#061d36]">Riscos que o investidor deve enxergar</h2>
@@ -838,7 +841,7 @@ function RiskAndActionPanel() {
 
 function MarketPanel() {
   return (
-    <section id="mercado" className="scroll-mt-20 rounded-lg border border-[#d9e1ec] bg-white shadow-sm">
+    <section id="mercado" className="scroll-mt-20 self-start rounded-[2px] border border-[#d9e1ec] bg-white shadow-sm">
       <PanelHeader icon={Truck} title="Vocação comercial e mercado de aluguel" />
       <div className="p-4">
         <div className="mb-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
@@ -910,7 +913,7 @@ function MarketPanel() {
 
 function ScenarioPanel({ scenarios }: { scenarios: Array<Scenario & { monthly: number; capRate: number; vgv: number; profit: number; margin: number }> }) {
   return (
-    <section className="rounded-lg border border-[#d9e1ec] bg-white shadow-sm">
+    <section className="self-start rounded-[2px] border border-[#d9e1ec] bg-white shadow-sm">
       <PanelHeader icon={BarChart3} title="Cenários financeiros pós-2027" />
       <div className="grid gap-3 p-4 lg:grid-cols-3">
         {scenarios.map((scenario) => (
@@ -942,7 +945,7 @@ function CostsPanel({ results }: { results: SimulationResult }) {
   ];
 
   return (
-    <section id="custos" className="scroll-mt-20 rounded-lg border border-[#d9e1ec] bg-white shadow-sm">
+    <section id="custos" className="scroll-mt-20 self-start rounded-[2px] border border-[#d9e1ec] bg-white shadow-sm">
       <PanelHeader icon={Landmark} title="Estrutura de custos do simulador" />
       <div className="grid gap-4 p-4 lg:grid-cols-[0.82fr_1.18fr]">
         <div className="rounded-lg bg-[#061d36] p-4 text-white">
@@ -1000,7 +1003,7 @@ function CostsPanel({ results }: { results: SimulationResult }) {
 
 function InvestorPanel({ results }: { results: SimulationResult }) {
   return (
-    <section id="investidor" className="scroll-mt-20 rounded-lg border border-[#d9e1ec] bg-white shadow-sm">
+    <section id="investidor" className="scroll-mt-20 self-start rounded-[2px] border border-[#d9e1ec] bg-white shadow-sm">
       <PanelHeader icon={ShieldCheck} title="Resumo comercial para investidores" />
       <div className="grid gap-4 p-4">
         <div className="grid gap-3 sm:grid-cols-2">
