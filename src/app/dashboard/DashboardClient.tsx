@@ -323,33 +323,34 @@ export default function DashboardClient() {
   };
 
   return (
-    <main className="min-h-screen bg-[#f4f7fa] text-[#10243d]">
+    <main className="min-h-screen bg-[#06111f] text-[#10243d]">
       <Header nav={nav} activeSection={activeSection} onNavClick={handleNavClick} />
 
-      <div className="mx-auto max-w-[1500px] px-4 py-5 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1580px] px-4 py-5 sm:px-6 lg:px-8">
             <section
               id="visao-geral"
-              className="relative isolate grid min-h-[680px] scroll-mt-24 overflow-hidden rounded-[2px] bg-[#061d36] shadow-2xl xl:grid-cols-[1.03fr_0.97fr]"
+              className="relative isolate grid min-h-[760px] scroll-mt-24 overflow-hidden rounded-[2px] border border-white/10 bg-[#061d36] shadow-[0_36px_90px_rgba(0,0,0,0.45)] xl:grid-cols-[1.04fr_0.96fr]"
             >
               <Image
                 src={plantaReal}
                 alt="Planta aérea real do terreno na Rua Guilherme Scharf"
                 fill
                 priority
-                className="object-cover opacity-70"
+                className="object-cover opacity-78"
               />
-              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,29,54,0.98)_0%,rgba(6,29,54,0.90)_34%,rgba(6,29,54,0.55)_64%,rgba(6,29,54,0.18)_100%)]" />
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,14,28,0.98)_0%,rgba(3,14,28,0.92)_34%,rgba(3,14,28,0.58)_64%,rgba(3,14,28,0.22)_100%)]" />
+              <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#06111f] to-transparent" />
               <div className="relative z-10 flex flex-col justify-between p-6 text-white sm:p-8 lg:p-12">
                 <div>
-                  <p className="max-w-fit border-l-4 border-[#f97316] pl-3 text-xs font-black uppercase tracking-[0.22em] text-[#ffb15f]">
-                    Memorando de investimento imobiliário
+                  <p className="max-w-fit border-l-4 border-[#f97316] pl-3 text-xs font-black uppercase tracking-[0.24em] text-[#ffb15f]">
+                    Memorando privado para investidores
                   </p>
-                  <h1 className="mt-6 max-w-4xl text-4xl font-black leading-[0.96] tracking-tight sm:text-6xl lg:text-7xl">
-                    Guilherme Scharf antes da reprecificação do corredor
+                  <h1 className="mt-6 max-w-5xl text-4xl font-black leading-[0.94] tracking-tight sm:text-6xl lg:text-7xl">
+                    Área estratégica na rótula da Guilherme Scharf
                   </h1>
                   <p className="mt-6 max-w-2xl text-base leading-8 text-white/76 sm:text-lg">
-                    Frações comerciais com frente estratégica, tese de renda e potencial patrimonial associado à
-                    conexão com a Via-Expressa. Um ativo para quem busca entrar antes da maturação urbana da região.
+                    Frações comerciais com frente rara, escala urbana e vocação para varejo, serviços, posto,
+                    supermercado e logística. Uma tese para entrar antes da maturação do novo corredor de acesso.
                   </p>
                   <div className="mt-8 flex flex-wrap gap-3">
                     <a
@@ -371,7 +372,7 @@ export default function DashboardClient() {
                     </button>
                   </div>
                 </div>
-                <div className="mt-10 grid gap-3 sm:grid-cols-3">
+                <div className="mt-10 grid gap-px overflow-hidden rounded-[2px] border border-white/14 bg-white/12 backdrop-blur sm:grid-cols-3">
                   <HeroProof label="Entrada" value="R$ 600/m²" copy="Cota atual da fração" tone="dark" />
                   <HeroProof label="Cenário-alvo" value="R$ 1.800/m²" copy="Tese patrimonial pós-2027" tone="dark" />
                   <HeroProof label="Frente" value="1.400 m" copy="Exposição para a Guilherme Scharf" tone="dark" />
@@ -400,6 +401,8 @@ export default function DashboardClient() {
                 </div>
               </div>
             </section>
+
+            <ExecutiveSnapshotPanel results={results} />
 
             <InvestmentOptionsPanel
               summaries={fractionSummaries}
@@ -458,7 +461,7 @@ function Header({
   onNavClick: (label: string, id: string) => void;
 }) {
   return (
-    <header className="sticky top-0 z-40 border-b border-[#d9e1ec] bg-white/94 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#06111f]/94 text-white backdrop-blur">
       <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
         <div className="flex min-w-0 items-center gap-3">
           <img
@@ -466,25 +469,25 @@ function Header({
             alt="Carlito de Souza Corretor de Imóveis"
             width={210}
             height={72}
-            className="h-auto w-[130px] sm:w-[170px]"
+            className="h-auto w-[130px] rounded-[2px] bg-white px-3 py-2 sm:w-[170px]"
           />
           <div className="min-w-0">
-            <p className="hidden text-xs font-black uppercase tracking-[0.18em] text-[#0b4d8c] sm:block">
-              Investment memo imobiliário
+            <p className="hidden text-xs font-black uppercase tracking-[0.18em] text-[#ffb15f] sm:block">
+              Investment memo
             </p>
-            <p className="hidden text-xs font-semibold text-[#6d7a89] md:block">
+            <p className="hidden text-xs font-semibold text-white/58 md:block">
               Rua Guilherme Scharf, Blumenau - SC
             </p>
           </div>
         </div>
-        <nav className="hidden items-center gap-1 rounded-full border border-[#d9e1ec] bg-[#f8fafc] p-1 lg:flex">
+        <nav className="hidden items-center gap-1 rounded-full border border-white/12 bg-white/5 p-1 lg:flex">
           {nav.map((item) => (
             <button
               type="button"
               key={item.label}
               onClick={() => onNavClick(item.label, item.id)}
               className={`rounded-full px-3 py-2 text-xs font-black ${
-                activeSection === item.label ? "bg-[#061d36] text-white" : "text-[#5c6b7d] hover:bg-white hover:text-[#061d36]"
+                activeSection === item.label ? "bg-[#f97316] text-white" : "text-white/62 hover:bg-white/10 hover:text-white"
               }`}
             >
               {item.label}
@@ -506,6 +509,37 @@ function Header({
   );
 }
 
+function ExecutiveSnapshotPanel({ results }: { results: SimulationResult }) {
+  const metrics = [
+    { label: "Aporte estimado", value: formatCurrency(results.totalInvestment), help: "terreno + obra + indiretos" },
+    { label: "Renda mensal", value: formatCurrency(results.monthlyRevenue), help: "cenário base de ocupação" },
+    { label: "Yield on Cost", value: formatPercent(results.capRate), help: "NOI anual / investimento" },
+    { label: "Lucro na saída", value: formatCurrency(results.profit), help: "venda menos custos" },
+    { label: "Payback teórico", value: `${formatNumber(results.paybackYears, 1)} anos`, help: "NOI anual como base" },
+  ];
+
+  return (
+    <section className="relative z-20 -mt-16 grid overflow-hidden rounded-[2px] border border-white/12 bg-[#07192d] shadow-[0_28px_70px_rgba(0,0,0,0.36)] lg:grid-cols-[1.05fr_1.95fr]">
+      <div className="border-b border-white/10 p-6 text-white lg:border-b-0 lg:border-r">
+        <p className="text-xs font-black uppercase tracking-[0.22em] text-[#ffb15f]">Resumo executivo</p>
+        <h2 className="mt-3 text-3xl font-black leading-tight">O investidor entende em menos de um minuto.</h2>
+        <p className="mt-3 text-sm leading-6 text-white/64">
+          A tese combina preço de entrada, frente comercial, potencial de renda e saída patrimonial pós-infraestrutura.
+        </p>
+      </div>
+      <div className="grid gap-px bg-white/10 sm:grid-cols-2 xl:grid-cols-5">
+        {metrics.map((metric) => (
+          <article key={metric.label} className="bg-[#0a223d] p-5 text-white">
+            <p className="text-[11px] font-black uppercase tracking-[0.16em] text-white/45">{metric.label}</p>
+            <p className="mt-3 text-2xl font-black text-white xl:text-xl 2xl:text-2xl">{metric.value}</p>
+            <p className="mt-2 text-xs font-semibold leading-5 text-white/52">{metric.help}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function InvestmentOptionsPanel({
   summaries,
   selectedLot,
@@ -516,11 +550,11 @@ function InvestmentOptionsPanel({
   onSelect: (area: number) => void;
 }) {
   return (
-    <section className="mt-4 overflow-hidden rounded-[2px] border border-[#d9e1ec] bg-white shadow-[0_18px_48px_rgba(6,29,54,0.08)]">
-      <div className="grid gap-4 border-b border-[#d9e1ec] bg-[linear-gradient(90deg,#ffffff_0%,#f7fbff_100%)] p-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+    <section className="mt-6 overflow-hidden rounded-[2px] border border-white/10 bg-white shadow-[0_28px_70px_rgba(0,0,0,0.28)]">
+      <div className="grid gap-4 border-b border-[#d9e1ec] bg-[linear-gradient(90deg,#ffffff_0%,#eef5fc_100%)] p-6 lg:grid-cols-[0.86fr_1.14fr] lg:items-center">
         <div>
-          <p className="text-sm font-black uppercase text-[#f97316]">Escolha sua fração de investimento</p>
-          <h2 className="mt-2 text-2xl font-black text-[#061d36] sm:text-3xl">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#f97316]">Escolha sua fração de investimento</p>
+          <h2 className="mt-2 text-3xl font-black text-[#061d36] sm:text-4xl">
             A decisão começa pelo tamanho do lote
           </h2>
         </div>
@@ -529,7 +563,7 @@ function InvestmentOptionsPanel({
           capital estimado, renda mensal e potencial de saída patrimonial com premissas abertas ao investidor.
         </p>
       </div>
-      <div className="grid gap-3 p-5 lg:grid-cols-3">
+      <div className="grid gap-4 p-6 lg:grid-cols-3">
         {summaries.map((item) => {
           const isSelected = selectedLot === item.lotArea;
           return (
@@ -537,15 +571,15 @@ function InvestmentOptionsPanel({
               key={item.lotArea}
               className={`relative overflow-hidden rounded-[2px] border p-5 transition ${
                 isSelected
-                  ? "border-[#f97316] bg-[#fff7ed] shadow-[0_18px_38px_rgba(249,115,22,0.12)]"
+                  ? "border-[#f97316] bg-[#061d36] text-white shadow-[0_24px_52px_rgba(6,29,54,0.18)]"
                   : "border-[#d9e1ec] bg-[#f8fafc] hover:border-[#b8c8da]"
               }`}
             >
               {isSelected ? <div className="absolute inset-x-0 top-0 h-1 bg-[#f97316]" /> : null}
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-xs font-black uppercase text-[#6d7a89]">Fração</p>
-                  <p className="mt-1 text-3xl font-black text-[#061d36]">{formatNumber(item.lotArea)} m²</p>
+                  <p className={`text-xs font-black uppercase ${isSelected ? "text-[#ffb15f]" : "text-[#6d7a89]"}`}>Fração</p>
+                  <p className={`mt-1 text-4xl font-black ${isSelected ? "text-white" : "text-[#061d36]"}`}>{formatNumber(item.lotArea)} m²</p>
                 </div>
                 <button
                   type="button"
@@ -558,13 +592,17 @@ function InvestmentOptionsPanel({
                 </button>
               </div>
               <div className="mt-4 grid gap-2 text-sm">
-                <MetricRow label="Aporte total estimado" value={formatCurrency(item.totalInvestment)} />
-                <MetricRow label="Área construída" value={`${formatNumber(item.builtArea)} m²`} />
-                <MetricRow label="Aluguel mensal" value={formatCurrency(item.monthlyRevenue)} />
-                <MetricRow label="Yield on Cost" value={formatPercent(item.capRate)} />
-                <MetricRow label="Lucro na venda" value={formatCurrency(item.profit)} />
+                <MetricRow label="Aporte total estimado" value={formatCurrency(item.totalInvestment)} dark={isSelected} />
+                <MetricRow label="Área construída" value={`${formatNumber(item.builtArea)} m²`} dark={isSelected} />
+                <MetricRow label="Aluguel mensal" value={formatCurrency(item.monthlyRevenue)} dark={isSelected} />
+                <MetricRow label="Yield on Cost" value={formatPercent(item.capRate)} dark={isSelected} />
+                <MetricRow label="Lucro na venda" value={formatCurrency(item.profit)} dark={isSelected} />
               </div>
-              <div className="mt-4 rounded-lg bg-white p-3 text-xs font-semibold leading-5 text-[#5c6b7d] ring-1 ring-[#d9e1ec]">
+              <div
+                className={`mt-4 rounded-[2px] p-3 text-xs font-semibold leading-5 ring-1 ${
+                  isSelected ? "bg-white/8 text-white/64 ring-white/10" : "bg-white text-[#5c6b7d] ring-[#d9e1ec]"
+                }`}
+              >
                 Payback teórico de {formatNumber(item.paybackYears, 1)} anos pelo NOI e ROI de venda de{" "}
                 {formatPercent(item.roiOnSale)} no cenário selecionado.
               </div>
@@ -1087,10 +1125,7 @@ function PanelHeader({ icon: Icon, title }: { icon: typeof MapPinned; title: str
         <span className="flex h-9 w-9 items-center justify-center rounded-[2px] bg-[#fff3e8] text-[#f97316]">
           <Icon size={19} />
         </span>
-        <div>
-          <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#f97316]">Análise do ativo</p>
-          <h2 className="text-base font-black text-[#061d36]">{title}</h2>
-        </div>
+        <h2 className="text-lg font-black text-[#061d36]">{title}</h2>
       </div>
     </div>
   );
@@ -1188,11 +1223,11 @@ function FeaturedMetric({ label, value, help }: { label: string; value: string; 
   );
 }
 
-function MetricRow({ label, value }: { label: string; value: string }) {
+function MetricRow({ label, value, dark = false }: { label: string; value: string; dark?: boolean }) {
   return (
-    <div className="mt-3 flex items-center justify-between gap-3 border-t border-[#d9e1ec] pt-3 text-sm">
-      <span className="text-[#6d7a89]">{label}</span>
-      <span className="font-black text-[#061d36]">{value}</span>
+    <div className={`mt-3 flex items-center justify-between gap-3 border-t pt-3 text-sm ${dark ? "border-white/12" : "border-[#d9e1ec]"}`}>
+      <span className={dark ? "text-white/58" : "text-[#6d7a89]"}>{label}</span>
+      <span className={`font-black ${dark ? "text-white" : "text-[#061d36]"}`}>{value}</span>
     </div>
   );
 }
