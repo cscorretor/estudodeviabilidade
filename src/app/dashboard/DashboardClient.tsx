@@ -415,7 +415,7 @@ export default function DashboardClient() {
 
             <InvestmentThesisPanel />
 
-            <section className="mt-4 grid items-start gap-4 xl:grid-cols-[1.08fr_0.92fr]">
+            <section className="mt-4 grid items-start gap-4 [&>*]:min-w-0 xl:grid-cols-[0.82fr_1.18fr]">
               <MapPanel />
               <SimulatorPanel
                 lotArea={lotArea}
@@ -435,12 +435,12 @@ export default function DashboardClient() {
               />
             </section>
 
-            <section className="mt-4 grid items-start gap-4 xl:grid-cols-[0.95fr_1.05fr]">
+            <section className="mt-4 grid items-start gap-4 [&>*]:min-w-0 xl:grid-cols-[0.95fr_1.05fr]">
               <MarketPanel />
               <ScenarioPanel scenarios={visibleScenario} />
             </section>
 
-            <section className="mt-4 grid items-start gap-4 xl:grid-cols-[1.08fr_0.92fr]">
+            <section className="mt-4 grid items-start gap-4 [&>*]:min-w-0 xl:grid-cols-[1.08fr_0.92fr]">
               <CostsPanel results={results} />
               <InvestorPanel results={results} />
             </section>
@@ -575,66 +575,100 @@ function InvestmentOptionsPanel({
   selectedLot: number;
   onSelect: (area: number) => void;
 }) {
+  const selected = summaries.find((item) => item.lotArea === selectedLot) ?? summaries[0];
+
   return (
-    <section className="mt-6 overflow-hidden rounded-[2px] border border-white/10 bg-white shadow-[0_28px_70px_rgba(0,0,0,0.28)]">
-      <div className="grid gap-4 border-b border-[#d9e1ec] bg-[linear-gradient(90deg,#ffffff_0%,#eef5fc_100%)] p-6 lg:grid-cols-[0.86fr_1.14fr] lg:items-center">
-        <div>
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#f97316]">Escolha sua fração de investimento</p>
-          <h2 className="mt-2 text-3xl font-black text-[#061d36] sm:text-4xl">
-            A decisão começa pelo tamanho do lote
+    <section className="mt-6 overflow-hidden rounded-[2px] border border-white/10 bg-[#f7fafc] shadow-[0_32px_90px_rgba(0,0,0,0.32)]">
+      <div className="grid gap-px bg-[#d9e1ec] lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="bg-white p-6 sm:p-8">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#f97316]">Frações comerciais disponíveis</p>
+          <h2 className="mt-3 max-w-2xl text-3xl font-black leading-tight text-[#061d36] sm:text-5xl">
+            Compare a entrada pelo retorno esperado.
           </h2>
-        </div>
-        <p className="text-sm leading-6 text-[#5c6b7d]">
-          Três portas de entrada para a mesma tese: menor exposição, equilíbrio ou escala. Cada fração compara
-          capital estimado, renda mensal e potencial de saída patrimonial com premissas abertas ao investidor.
-        </p>
-      </div>
-      <div className="grid gap-4 p-6 lg:grid-cols-3">
-        {summaries.map((item) => {
-          const isSelected = selectedLot === item.lotArea;
-          return (
-            <article
-              key={item.lotArea}
-              className={`relative overflow-hidden rounded-[2px] border p-5 transition ${
-                isSelected
-                  ? "border-[#f97316] bg-[#061d36] text-white shadow-[0_24px_52px_rgba(6,29,54,0.18)]"
-                  : "border-[#d9e1ec] bg-[#f8fafc] hover:border-[#b8c8da]"
-              }`}
-            >
-              {isSelected ? <div className="absolute inset-x-0 top-0 h-1 bg-[#f97316]" /> : null}
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className={`text-xs font-black uppercase ${isSelected ? "text-[#ffb15f]" : "text-[#6d7a89]"}`}>Fração</p>
-                  <p className={`mt-1 text-4xl font-black ${isSelected ? "text-white" : "text-[#061d36]"}`}>{formatNumber(item.lotArea)} m²</p>
-                </div>
+          <p className="mt-4 max-w-2xl text-base leading-7 text-[#526174]">
+            A área total cria escala, mas a negociação conversa com investidores por fração. A leitura correta compara
+            capital necessário, renda mensal, liquidez futura e margem de segurança.
+          </p>
+          <div className="mt-8 grid gap-3">
+            {summaries.map((item) => {
+              const isSelected = selectedLot === item.lotArea;
+              return (
                 <button
+                  key={item.lotArea}
                   type="button"
                   onClick={() => onSelect(item.lotArea)}
-                  className={`rounded-full px-4 py-2 text-xs font-black ${
-                    isSelected ? "bg-[#f97316] text-white" : "bg-white text-[#0b4d8c] ring-1 ring-[#d9e1ec]"
+                  className={`group grid gap-4 border p-4 text-left transition sm:grid-cols-[150px_1fr_130px] sm:items-center ${
+                    isSelected
+                      ? "border-[#f97316] bg-[#061d36] text-white shadow-[0_22px_46px_rgba(6,29,54,0.18)]"
+                      : "border-[#d9e1ec] bg-[#f8fafc] text-[#061d36] hover:border-[#f97316]"
                   }`}
                 >
-                  Simular
+                  <div>
+                    <p className={`text-[11px] font-black uppercase tracking-[0.14em] ${isSelected ? "text-[#ffb15f]" : "text-[#6d7a89]"}`}>
+                      Fração
+                    </p>
+                    <p className="mt-1 text-3xl font-black">{formatNumber(item.lotArea)} m²</p>
+                  </div>
+                  <div className={`grid gap-2 text-sm sm:grid-cols-3 ${isSelected ? "text-white/70" : "text-[#5c6b7d]"}`}>
+                    <span>
+                      <strong className={isSelected ? "block text-white" : "block text-[#061d36]"}>
+                        {formatCurrency(item.totalInvestment)}
+                      </strong>
+                      aporte estimado
+                    </span>
+                    <span>
+                      <strong className={isSelected ? "block text-white" : "block text-[#061d36]"}>
+                        {formatCurrency(item.monthlyRevenue)}
+                      </strong>
+                      renda mensal
+                    </span>
+                    <span>
+                      <strong className={isSelected ? "block text-white" : "block text-[#061d36]"}>
+                        {formatPercent(item.capRate)}
+                      </strong>
+                      Yield on Cost
+                    </span>
+                  </div>
+                  <span
+                    className={`inline-flex justify-center px-4 py-3 text-sm font-black ${
+                      isSelected ? "bg-[#f97316] text-white" : "bg-white text-[#0b4d8c] ring-1 ring-[#d9e1ec] group-hover:ring-[#f97316]"
+                    }`}
+                  >
+                    Analisar
+                  </span>
                 </button>
+              );
+            })}
+          </div>
+        </div>
+        <aside className="relative overflow-hidden bg-[#061d36] p-6 text-white sm:p-8">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(249,115,22,0.22),transparent_34%),linear-gradient(135deg,rgba(255,255,255,0.08),transparent_42%)]" />
+          <div className="relative">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#ffb15f]">Fração selecionada</p>
+            <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="text-6xl font-black leading-none">{formatNumber(selected.lotArea)} m²</p>
+                <p className="mt-3 text-sm font-semibold text-white/62">
+                  {formatNumber(selected.builtArea)} m² de área construída estimada
+                </p>
               </div>
-              <div className="mt-4 grid gap-2 text-sm">
-                <MetricRow label="Aporte total estimado" value={formatCurrency(item.totalInvestment)} dark={isSelected} />
-                <MetricRow label="Área construída" value={`${formatNumber(item.builtArea)} m²`} dark={isSelected} />
-                <MetricRow label="Aluguel mensal" value={formatCurrency(item.monthlyRevenue)} dark={isSelected} />
-                <MetricRow label="Yield on Cost" value={formatPercent(item.capRate)} dark={isSelected} />
-                <MetricRow label="Lucro na venda" value={formatCurrency(item.profit)} dark={isSelected} />
+              <div className="border-l border-white/12 pl-5">
+                <p className="text-sm font-semibold text-white/62">Leitura rápida</p>
+                <p className="mt-1 text-4xl font-black text-[#ffb15f]">{formatPercent(selected.capRate)}</p>
+                <p className="text-xs font-bold uppercase tracking-[0.12em] text-white/45">Yield on Cost</p>
               </div>
-              <div
-                className={`mt-4 rounded-[2px] p-3 text-xs font-semibold leading-5 ring-1 ${
-                  isSelected ? "bg-white/8 text-white/64 ring-white/10" : "bg-white text-[#5c6b7d] ring-[#d9e1ec]"
-                }`}
-              >
-                Payback teórico de {formatNumber(item.paybackYears, 1)} anos pelo NOI e ROI de venda de{" "}
-                {formatPercent(item.roiOnSale)} no cenário selecionado.
-              </div>
-            </article>
-          );
-        })}
+            </div>
+            <div className="mt-8 grid gap-px bg-white/10 sm:grid-cols-2">
+              <FeaturedMetric label="Investimento" value={formatCurrency(selected.totalInvestment)} help="terreno + obra + indiretos" />
+              <FeaturedMetric label="Renda mensal" value={formatCurrency(selected.monthlyRevenue)} help="projeção com ocupação" />
+              <FeaturedMetric label="Lucro na saída" value={formatCurrency(selected.profit)} help="venda menos custos" />
+              <FeaturedMetric label="Payback teórico" value={`${formatNumber(selected.paybackYears, 1)} anos`} help="NOI anual como base" />
+            </div>
+            <p className="mt-6 border-l-2 border-[#f97316] pl-4 text-sm leading-6 text-white/70">
+              Premissa, não promessa: a simulação depende do custo executivo, velocidade de locação, data do viaduto e preço real de saída.
+            </p>
+          </div>
+        </aside>
       </div>
     </section>
   );
@@ -750,29 +784,46 @@ function SimulatorPanel({
   results: SimulationResult;
 }) {
   return (
-    <section id="simulador" className="scroll-mt-20 self-start rounded-[2px] border border-[#d9e1ec] bg-white shadow-sm">
-      <PanelHeader icon={SlidersHorizontal} title="Simulador de viabilidade por fração" />
+    <section
+      id="simulador"
+      className="scroll-mt-20 self-start overflow-hidden rounded-[2px] border border-white/10 bg-[#07192d] text-white shadow-[0_28px_70px_rgba(0,0,0,0.28)]"
+    >
+      <div className="grid gap-4 border-b border-white/10 p-5 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+        <div className="flex items-center gap-3">
+          <span className="flex h-10 w-10 items-center justify-center bg-[#f97316] text-white">
+            <SlidersHorizontal size={20} />
+          </span>
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#ffb15f]">Mesa de decisão</p>
+            <h2 className="text-2xl font-black">Simulador de viabilidade por fração</h2>
+          </div>
+        </div>
+        <p className="text-sm leading-6 text-white/65">
+          Ajuste área, ocupação, CUB, aluguel e preço de saída. O investidor enxerga imediatamente o impacto em aporte,
+          renda, Yield on Cost, payback e lucro potencial.
+        </p>
+      </div>
       <div className="grid gap-4 p-4 lg:grid-cols-[1fr_0.95fr]">
         <div className="space-y-3">
-          <div className="rounded-lg border border-[#d9e1ec] bg-[#f8fafc] p-3">
-            <p className="text-sm font-black text-[#061d36]">Escolha a fração de compra</p>
+          <div className="border border-white/10 bg-white/[0.06] p-4">
+            <p className="text-sm font-black text-white">Escolha a fração de compra</p>
             <div className="mt-3 grid grid-cols-3 gap-2">
               {LOT_PRESETS.map((preset) => (
                 <button
                   key={preset}
                   onClick={() => setLotArea(preset)}
-                  className={`rounded-lg border px-3 py-2 text-sm font-black ${
+                  className={`border px-3 py-2 text-sm font-black ${
                     lotArea === preset
                       ? "border-[#f97316] bg-[#f97316] text-white"
-                      : "border-[#d9e1ec] bg-white text-[#0b4d8c] hover:border-[#f97316]"
+                      : "border-white/15 bg-white/8 text-white hover:border-[#f97316]"
                   }`}
                 >
                   {formatNumber(preset)} m²
                 </button>
               ))}
             </div>
-            <p className="mt-3 text-xs font-semibold leading-5 text-[#6d7a89]">
-              A área total de 128.000 m² serve como visão de potencial. A venda para investidor começa por frações.
+            <p className="mt-3 text-xs font-semibold leading-5 text-white/56">
+              O terreno completo mostra a escala do ativo; a análise financeira acontece por lote negociável.
             </p>
           </div>
           <RangeControl label="Área do lote comprado" value={lotArea} min={2000} max={10000} step={250} suffix="m²" onChange={setLotArea} />
@@ -868,7 +919,7 @@ function RiskAndActionPanel() {
   ];
 
   return (
-    <section className="mt-4 grid items-start gap-4 xl:grid-cols-[0.95fr_1.05fr]">
+    <section className="mt-4 grid items-start gap-4 [&>*]:min-w-0 xl:grid-cols-[0.95fr_1.05fr]">
       <div className="self-start rounded-[2px] border border-[#d9e1ec] bg-white p-4 shadow-sm">
         <div className="flex items-center gap-2">
           <Clock3 className="text-[#f97316]" size={22} />
@@ -1243,7 +1294,7 @@ function FeaturedMetric({ label, value, help }: { label: string; value: string; 
   return (
     <article className="bg-[#082542] p-4">
       <p className="text-xs font-black uppercase tracking-[0.14em] text-white/52">{label}</p>
-      <p className="mt-2 text-2xl font-black text-white">{value}</p>
+      <p className="mt-2 text-xl font-black leading-tight text-white 2xl:text-2xl">{value}</p>
       <p className="mt-1 text-xs font-semibold leading-5 text-white/58">{help}</p>
     </article>
   );
