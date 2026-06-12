@@ -734,16 +734,37 @@ function SimulatorPanel({
           <RangeControl label="Preço de venda pós-2027" value={saleM2} min={4200} max={7600} step={100} prefix="R$ " suffix="/m²" onChange={setSaleM2} />
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2">
-          <ResultTile label="Investimento total" value={formatCurrency(results.totalInvestment)} help="Terreno + obra + indiretos" tone="blue" />
-          <ResultTile label="Receita mensal" value={formatCurrency(results.monthlyRevenue)} help="Aluguel com ocupação" tone="green" />
-          <ResultTile label="NOI anual" value={formatCurrency(results.annualNoi)} help="Receita anual menos 10% de fricção" tone="green" />
-          <ResultTile label="Yield on Cost" value={formatPercent(results.capRate)} help="NOI anual / custo total" tone="orange" />
-          <ResultTile label="Lucro estimado" value={formatCurrency(results.profit)} help="Venda menos custos e despesas" tone="green" />
-          <ResultTile label="ROI na venda" value={formatPercent(results.roiOnSale)} help="Lucro / investimento total" tone="orange" />
-          <ResultTile label="Payback teórico" value={`${formatNumber(results.paybackYears, 1)} anos`} help="Investimento / NOI anual" tone="blue" />
-          <ResultTile label="Custo por m² pronto" value={formatCurrency(results.costPerBuiltM2)} help="Custo total / área construída" tone="blue" />
-          <div className="rounded-lg border border-[#d9e1ec] bg-[#f6f9fc] p-4 sm:col-span-2">
+        <div className="space-y-3">
+          <div className="overflow-hidden rounded-[2px] bg-[#061d36] text-white shadow-[0_22px_46px_rgba(6,29,54,0.18)]">
+            <div className="border-b border-white/10 p-5">
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-[#ffb15f]">Fração em análise</p>
+              <div className="mt-3 flex flex-wrap items-end justify-between gap-3">
+                <div>
+                  <p className="text-4xl font-black leading-none">{formatNumber(lotArea)} m²</p>
+                  <p className="mt-2 text-sm font-semibold text-white/65">{formatNumber(builtArea)} m² de área construída estimada</p>
+                </div>
+                <div className="text-left sm:text-right">
+                  <p className="text-sm font-semibold text-white/62">Yield on Cost</p>
+                  <p className="text-4xl font-black text-[#ffb15f]">{formatPercent(results.capRate)}</p>
+                </div>
+              </div>
+            </div>
+            <div className="grid gap-px bg-white/10 sm:grid-cols-2">
+              <FeaturedMetric label="Investimento total" value={formatCurrency(results.totalInvestment)} help="Terreno + obra + indiretos" />
+              <FeaturedMetric label="Receita mensal" value={formatCurrency(results.monthlyRevenue)} help="Aluguel projetado com ocupação" />
+              <FeaturedMetric label="NOI anual" value={formatCurrency(results.annualNoi)} help="Receita anual menos 10% de fricção" />
+              <FeaturedMetric label="Lucro na venda" value={formatCurrency(results.profit)} help="VGV menos custos e despesas" />
+            </div>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <ResultTile label="ROI na venda" value={formatPercent(results.roiOnSale)} help="Lucro / investimento total" tone="orange" />
+            <ResultTile label="Payback teórico" value={`${formatNumber(results.paybackYears, 1)} anos`} help="Investimento / NOI anual" tone="blue" />
+            <ResultTile label="Custo por m² pronto" value={formatCurrency(results.costPerBuiltM2)} help="Custo total / área construída" tone="blue" />
+            <ResultTile label="Margem do VGV" value={formatPercent(results.margin)} help="Lucro / valor de venda" tone="green" />
+          </div>
+
+          <div className="rounded-[2px] border border-[#d9e1ec] bg-white p-5 shadow-[0_14px_34px_rgba(6,29,54,0.06)]">
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-xs font-black uppercase text-[#6d7a89]">Leitura do Yield on Cost</p>
@@ -787,7 +808,7 @@ function RiskAndActionPanel() {
       <div className="self-start rounded-[2px] border border-[#d9e1ec] bg-white p-4 shadow-sm">
         <div className="flex items-center gap-2">
           <Clock3 className="text-[#f97316]" size={22} />
-          <h2 className="text-lg font-black text-[#061d36]">Por que o preço ainda existe?</h2>
+          <h2 className="text-lg font-black text-[#061d36]">Por que a janela de entrada ainda existe?</h2>
         </div>
         <div className="mt-4 grid gap-3">
           <Argument
@@ -799,8 +820,8 @@ function RiskAndActionPanel() {
             copy="O terreno total é amplo, mas a compra pode ser estruturada por lotes menores, abrindo espaço para diferentes perfis de investidor."
           />
           <Argument
-            title="3. Produto ainda precisa ser empacotado"
-            copy="A oportunidade ganha liquidez quando vira uma tese simples: fração, vocação, custo, renda, risco e saída."
+            title="3. O valor aparece antes para quem faz a leitura correta"
+            copy="A oportunidade fica mais clara quando o investidor compara fração, vocação, custo, renda, risco e saída em uma única tese."
           />
         </div>
       </div>
@@ -1061,18 +1082,16 @@ function HeroProof({
 
 function PanelHeader({ icon: Icon, title }: { icon: typeof MapPinned; title: string }) {
   return (
-    <div className="flex items-center justify-between gap-3 border-b border-[#d9e1ec] bg-[#061d36] px-4 py-3 text-white">
-      <div className="flex items-center gap-2">
-        <Icon size={18} className="text-[#ffb15f]" />
-        <h2 className="text-sm font-black uppercase">{title}</h2>
+    <div className="flex items-center justify-between gap-3 border-b border-[#d9e1ec] bg-white px-5 py-4">
+      <div className="flex items-center gap-3">
+        <span className="flex h-9 w-9 items-center justify-center rounded-[2px] bg-[#fff3e8] text-[#f97316]">
+          <Icon size={19} />
+        </span>
+        <div>
+          <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#f97316]">Análise do ativo</p>
+          <h2 className="text-base font-black text-[#061d36]">{title}</h2>
+        </div>
       </div>
-      <img
-        src={logoSrc}
-        alt="Carlito de Souza"
-        width={120}
-        height={42}
-        className="hidden h-auto w-[86px] rounded-sm bg-white px-2 py-1 sm:block"
-      />
     </div>
   );
 }
@@ -1121,10 +1140,10 @@ function RangeControl({
   onChange: (value: number) => void;
 }) {
   return (
-    <label className="block rounded-lg border border-[#d9e1ec] bg-[#f8fafc] p-3">
+    <label className="block rounded-[2px] border border-[#d9e1ec] bg-white p-4 shadow-[0_10px_24px_rgba(6,29,54,0.035)]">
       <div className="flex items-center justify-between gap-3">
         <span className="text-sm font-black text-[#061d36]">{label}</span>
-        <span className="rounded-md bg-white px-2 py-1 text-sm font-black text-[#0b4d8c] shadow-sm">
+        <span className="rounded-[2px] border border-[#d9e1ec] bg-[#f8fafc] px-3 py-1 text-sm font-black text-[#0b4d8c]">
           {prefix}
           {formatNumber(value, digits)}
           {suffix}
@@ -1151,10 +1170,20 @@ function ResultTile({ label, value, help, tone }: { label: string; value: string
   }[tone];
 
   return (
-    <article className="rounded-lg border border-[#d9e1ec] bg-[#f8fafc] p-4">
+    <article className="rounded-[2px] border border-[#d9e1ec] bg-white p-4 shadow-[0_10px_24px_rgba(6,29,54,0.04)]">
       <p className="text-xs font-black uppercase text-[#6d7a89]">{label}</p>
       <p className={`mt-2 text-2xl font-black ${color}`}>{value}</p>
       <p className="mt-1 text-xs font-semibold text-[#6d7a89]">{help}</p>
+    </article>
+  );
+}
+
+function FeaturedMetric({ label, value, help }: { label: string; value: string; help: string }) {
+  return (
+    <article className="bg-[#082542] p-4">
+      <p className="text-xs font-black uppercase tracking-[0.14em] text-white/52">{label}</p>
+      <p className="mt-2 text-2xl font-black text-white">{value}</p>
+      <p className="mt-1 text-xs font-semibold leading-5 text-white/58">{help}</p>
     </article>
   );
 }
